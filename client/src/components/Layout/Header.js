@@ -1,7 +1,12 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "../../context/auth";
+import { useRedirect } from "../../context/redir";
 
 const Header = () => {
+  const [auth, setAuth] = useAuth();
+  const [redir, setRedir] = useRedirect();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -18,7 +23,7 @@ const Header = () => {
             <span className="navbar-toggler-icon" />
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <Link to="/" className="navbar-brand" href="#">
+            <Link to="/" className="navbar-brand">
               🛒 ShopSpot
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -32,18 +37,46 @@ const Header = () => {
                   Category
                 </NavLink>
               </li>
+              {auth.user ? (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      to="/login"
+                      className="nav-link"
+                      onClick={() => {
+                        setAuth({
+                          ...auth,
+                          user: null,
+                          token: "",
+                        });
+                        localStorage.removeItem("auth");
+
+                        setRedir({
+                          ...redir,
+                          msg: "Logout successful.",
+                        });
+                      }}
+                    >
+                      logout
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <NavLink to="/register" className="nav-link">
+                      Signup
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/login" className="nav-link">
+                      Signin
+                    </NavLink>
+                  </li>{" "}
+                </>
+              )}
               <li className="nav-item">
-                <NavLink to="/register" className="nav-link" href="#">
-                  Signup
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/login" className="nav-link" href="#">
-                  Signin
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/cart" className="nav-link" href="#">
+                <NavLink to="/cart" className="nav-link">
                   Cart(0)
                 </NavLink>
               </li>

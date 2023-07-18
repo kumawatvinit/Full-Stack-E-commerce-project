@@ -13,12 +13,12 @@ import LockIcon from "@mui/icons-material/Lock";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/layout/layout";
-import { useState } from "react";
+import {useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import customAxios from "./customAxios";
+import { useRedirect } from "../../context/redir";
 
 const defaultTheme = createTheme();
 
@@ -29,6 +29,20 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [redir, setRedir] = useRedirect();
+
+  // toast msg will be displayed after the component has rendered 
+  // and the state has been updated. 
+  // This should ensure that the toast msg shows up properly when the user is redirected
+  useEffect(() => {
+    if (redir.msg) {
+      toast.success(redir.msg);
+      setRedir({
+        ...redir,
+        msg: "",
+      });
+    }
+  }, [redir, setRedir]);
 
   // navigate is a hook
   const navigate = useNavigate();
@@ -43,15 +57,14 @@ export default function Register() {
         { name, email, password, phone, address }
       );
 
-      console.log(res);
+      // console.log(res);
 
       if (res.data.success) {
-        toast.success("Registration successful. Please login.");
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 2500);
-        // navigate("/login", { state: { popup: true } });
+        setRedir({
+          ...redir,
+          msg: "Registration successful. Please login.",
+        });
+        navigate("/login");
       } else {
         toast.error(res.data.message);
       }

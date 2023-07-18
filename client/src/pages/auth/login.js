@@ -14,11 +14,11 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/layout/layout";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import customAxios from "./customAxios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
+import { useRedirect } from "../../context/redir";
 
 const defaultTheme = createTheme();
 
@@ -26,22 +26,22 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [auth, setAuth] = useAuth();
+  const [redir, setRedir] = useRedirect();
 
   const navigate = useNavigate();
 
-  // navigate is a hook
-  // hook: a function that lets you hook into react features
-  // The basic idea is that you can use state and other React features without writing a class.
-  const location = useLocation();
-  const popup = location.state?.popup || false;
-
+  // toast msg will be displayed after the component has rendered 
+  // and the state has been updated. 
+  // This should ensure that the toast msg shows up properly when the user is redirected
   useEffect(() => {
-    if (popup) {
-      toast.success("Registration successful. Please login.");
-      // Clear the state after showing the toast
-      location.state = null;
+    if (redir.msg) {
+      toast.success(redir.msg);
+      setRedir({
+        ...redir,
+        msg: "",
+      });
     }
-  }, [popup, location]);
+  }, [redir, setRedir]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,20 +52,23 @@ export default function Login() {
         { email, password }
       );
 
-      console.log(res);
+      // console.log(res);
 
       if (res.data.success) {
-        toast.success("Login successful.");
+        // toast.success("Login successful.");
         setAuth({
           ...auth,
           user: res.data.user,
           token: res.data.token,
         });
-        localStorage.setItem('auth', JSON.stringify(res.data));
-        
-        setTimeout(() => {
-          navigate("/");
-        }, 2500);
+        localStorage.setItem("auth", JSON.stringify(res.data));
+
+        setRedir({
+          ...redir,
+          msg: "Login successful",
+        });
+        navigate("/");
+
       } else {
         toast.error(res.data.message);
       }

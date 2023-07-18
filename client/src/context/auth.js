@@ -8,8 +8,8 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
-//   It will run only once when the app starts, 
-// and set the auth state if there is any data in localStorage
+  //   It will run only once when the app starts,
+  // and set the auth state if there is any data in localStorage
   useEffect(() => {
     const data = localStorage.getItem("auth");
 
@@ -21,6 +21,8 @@ const AuthProvider = ({ children }) => {
         token: parseData.token,
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //   [] is a dependency array
 
