@@ -6,6 +6,14 @@ import morgan from 'morgan';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoute.js';
 
+// nodemon
+// - Speedy development of node.js
+// - Auto restart server on detecting any change
+
+// To avoid cross origin error
+// 8080, 3000 origin error might occur
+import cors from 'cors';
+
 dotenv.config({path: './.env'});
 
 // connect to database
@@ -15,6 +23,7 @@ connectDB();
 const app = express();
 
 // middlewares
+app.use(cors());
 // using default json parser provided by express, instead of body-parser
 app.use(express.json());
 app.use(morgan('dev'));

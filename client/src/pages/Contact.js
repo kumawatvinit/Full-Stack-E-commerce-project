@@ -1,16 +1,16 @@
 import React from "react";
-import Header from "../components/Layout/Header";
-import Footer from "../components/Layout/Footer";
+import Header from "../components/layout/header";
+import Footer from "../components/layout/footer";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { AiOutlineMail } from "react-icons/ai";
+import Layout from "../components/layout/layout";
 
 const contactImage = process.env.PUBLIC_URL + "/logo.png";
 
 const Contact = () => {
   return (
-    <>
-      <Header />
+    <Layout title={"Contact us - ShopSpot"}>
       <div className="contact-container">
         <div className="contact-heading">
           <h1>Contact Us</h1>
@@ -54,8 +54,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

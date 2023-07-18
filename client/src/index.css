@@ -37,9 +37,9 @@ font-family: 'Poppins', sans-serif; */
 }
 
 .footer {
+    height: 16vh;
     color: white;
     padding: 25px;
-    background-color: #000;
     background: -webkit-linear-gradient(to left, #000, #434343);
     background: linear-gradient(to left, #000000, #370101);
 }
@@ -74,8 +74,8 @@ font-family: 'Poppins', sans-serif; */
 .contact-container {
     width: 100%;
     padding: 40px;
-    background: linear-gradient(to right, #2e86de, #4c4c4c);
-    /* Updated to a linear gradient background */
+    /* background: linear-gradient(to right, #2e86de, #4c4c4c); */
+    background: linear-gradient(to left, #2b3038, #45608b, #273a2b);
     color: #fff;
     /* Changed the text color to white */
 }
@@ -202,5 +202,83 @@ font-family: 'Poppins', sans-serif; */
 .contact-form button:hover {
     color: whitesmoke;
     background-color: green;
-    /* Updated the color for button hover effect */
+}
+
+.about-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 50px;
+    /* background: linear-gradient(to left, #000000, #370101); */
+    background: linear-gradient(to left, #2b3038, #45608b, #273a2b);
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-image {
+    width: 100%;
+    max-width: 500px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.about-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    /* background-color: rgba(255, 255, 255, 0.9); */
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(255, 255, 255, 0.6);
+    background: linear-gradient(to left, #6d8bbc, #66a073, #45608b);
+    font-family: 'Poppins', sans-serif;
+}
+
+@media (min-width: 768px) {
+    .about-container {
+        flex-direction: row;
+    }
+
+    .about-content {
+        flex-direction: row;
+    }
+
+    .about-image {
+        margin-right: 40px;
+    }
+
+    .about-card {
+        margin-top: 0;
+    }
+}
+
+.policy-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to left, #2b3038, #45608b, #273a2b);
+    padding: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.policy-content {
+    max-width: 800px;
+    text-align: justify;
+    color: white;
+}
+
+.policy-content h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.policy-content p {
+    margin-bottom: 15px;
+    line-height: 1.5;
 }
