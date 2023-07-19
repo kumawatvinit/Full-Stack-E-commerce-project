@@ -6,6 +6,7 @@ export const requireSignin = (req, res, next) => {
     try {
         const decoded = Jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
         req.user = decoded;
+        // console.log("Request passed the requireSignin middleWare", decoded);
         next();
     } catch (error) {
         /*
