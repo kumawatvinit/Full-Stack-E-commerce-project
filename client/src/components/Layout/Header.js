@@ -39,26 +39,44 @@ const Header = () => {
               </li>
               {auth.user ? (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item dropdown">
                     <NavLink
-                      to="/login"
-                      className="nav-link"
-                      onClick={() => {
-                        setAuth({
-                          ...auth,
-                          user: null,
-                          token: "",
-                        });
-                        localStorage.removeItem("auth");
-
-                        setRedir({
-                          ...redir,
-                          msg: "Logout successful.",
-                        });
-                      }}
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
-                      logout
+                      {auth?.user?.name}
                     </NavLink>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <NavLink to="/dashboard" className="dropdown-item">
+                          Dashboard
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/login"
+                          className="dropdown-item"
+                          onClick={() => {
+                            setAuth({
+                              ...auth,
+                              user: null,
+                              token: "",
+                            });
+                            localStorage.removeItem("auth");
+
+                            setRedir({
+                              ...redir,
+                              msg: "Logout successful.",
+                            });
+                          }}
+                        >
+                          Logout
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                 </>
               ) : (

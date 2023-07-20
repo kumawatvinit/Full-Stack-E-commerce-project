@@ -11,25 +11,12 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/layout/layout";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import customAxios from "./customAxios";
 import { useNavigate } from "react-router-dom";
 import { useRedirect } from "../../context/redir";
 
 const defaultTheme = createTheme();
-
-const validateInput = (inputValue, type) => {
-  const regexPatterns = {
-    alphanumeric: /^[a-zA-Z0-9\s]+$/,
-    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    password: /^[a-zA-Z0-9!@#$%^&*()_+{}[\]:;<>,.?~=-]+$/,
-    securityAnswer: /^[0-9\\]+$/,
-    mobileNumber: /^[0-9]{10}$|^(\+[0-9]{2})?[0-9]{10}$/,
-    address: /^([a-zA-Z0-9\s.,/-])+$/,
-  };
-
-  return regexPatterns[type].test(inputValue);
-};
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -38,19 +25,6 @@ export default function ForgotPassword() {
   const [redir, setRedir] = useRedirect();
 
   const navigate = useNavigate();
-
-  // toast msg will be displayed after the component has rendered
-  // and the state has been updated.
-  // This should ensure that the toast msg shows up properly when the user is redirected
-  // useEffect(() => {
-  //   if (redir.msg) {
-  //     toast.success(redir.msg);
-  //     setRedir({
-  //       ...redir,
-  //       msg: "",
-  //     });
-  //   }
-  // }, [redir, setRedir]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
