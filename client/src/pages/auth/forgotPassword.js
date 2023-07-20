@@ -3,72 +3,76 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockIcon from "@mui/icons-material/Lock";
+import MdLockReset from "@mui/icons-material/LockReset";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/layout/layout";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import customAxios from "./customAxios";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
 import { useRedirect } from "../../context/redir";
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+const validateInput = (inputValue, type) => {
+  const regexPatterns = {
+    alphanumeric: /^[a-zA-Z0-9\s]+$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^[a-zA-Z0-9!@#$%^&*()_+{}[\]:;<>,.?~=-]+$/,
+    securityAnswer: /^[0-9\\]+$/,
+    mobileNumber: /^[0-9]{10}$|^(\+[0-9]{2})?[0-9]{10}$/,
+    address: /^([a-zA-Z0-9\s.,/-])+$/,
+  };
+
+  return regexPatterns[type].test(inputValue);
+};
+
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth();
+  const [answer, setAnswer] = useState("");
   const [redir, setRedir] = useRedirect();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   // toast msg will be displayed after the component has rendered
   // and the state has been updated.
   // This should ensure that the toast msg shows up properly when the user is redirected
-  useEffect(() => {
-    if (redir.msg) {
-      toast.success(redir.msg);
-      setRedir({
-        ...redir,
-        msg: "",
-      });
-    }
-  }, [redir, setRedir]);
+  // useEffect(() => {
+  //   if (redir.msg) {
+  //     toast.success(redir.msg);
+  //     setRedir({
+  //       ...redir,
+  //       msg: "",
+  //     });
+  //   }
+  // }, [redir, setRedir]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
+      // console.log(email, password, answer);
+
       const res = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/login`,
-        { email, password }
+        `${process.env.REACT_APP_API}/api/v1/auth/forgot-password`,
+        { email, password, answer }
       );
 
       // console.log(res);
 
       if (res.data.success) {
-        // toast.success("Login successful.");
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
+        // toast.success("Forgot password successful.");
 
         setRedir({
           ...redir,
-          msg: "Login successful",
+          msg: "Password update successful",
         });
-        navigate(location.state || "/");
+        navigate("/login");
       } else {
         toast.error(res.data.message);
       }
@@ -79,7 +83,7 @@ export default function Login() {
   };
 
   return (
-    <Layout title={"Login - ShopSpot"} applyBackground={true}>
+    <Layout title={"Change password"} applyBackground={true}>
       <ThemeProvider theme={defaultTheme}>
         <Grid
           sx={{
@@ -113,7 +117,7 @@ export default function Login() {
           >
             <Box
               sx={{
-                my: 8,
+                my: 4,
                 mx: 4,
                 display: "flex",
                 flexDirection: "column",
@@ -121,10 +125,10 @@ export default function Login() {
               }}
             >
               <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockIcon />
+                <MdLockReset />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign in
+                Reset Password
               </Typography>
               <Box
                 component="form"
@@ -133,6 +137,7 @@ export default function Login() {
                 sx={{ mt: 1 }}
               >
                 <TextField
+                  type="email"
                   margin="normal"
                   required
                   fullWidth
@@ -144,6 +149,49 @@ export default function Login() {
                   autoComplete="email"
                   autoFocus
                 />
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    fontFamily: "sans-serif",
+                    marginTop: "1rem",
+                  }}
+                >
+                  What's your lucky number?
+                </Grid>
+                <TextField
+                  type="number"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="answer"
+                  label="Security Answer"
+                  name="answer"
+                  autoComplete="answer"
+                  onKeyDown={(evnt) => {
+                    const allowedKeys = [
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5",
+                      "6",
+                      "7",
+                      "8",
+                      "9",
+                      "Backspace",
+                    ];
+                    if (!allowedKeys.includes(evnt.key)) {
+                      evnt.preventDefault();
+                    }
+                  }}
+                  value={answer}
+                  onChange={(evnt) => setAnswer(evnt.target.value)}
+                />
                 <TextField
                   margin="normal"
                   required
@@ -151,14 +199,10 @@ export default function Login() {
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  label="Password"
+                  label="Set new password"
                   type="password"
                   id="password"
-                  autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
+                  autoComplete="new-password"
                 />
                 <div style={{ textAlign: "center" }}>
                   <Button
@@ -166,21 +210,9 @@ export default function Login() {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    Sign In
+                    Change Password
                   </Button>
                 </div>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="/forgot-password" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="/register" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
               </Box>
             </Box>
           </Grid>

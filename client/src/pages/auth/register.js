@@ -29,6 +29,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [answer, setAnswer] = useState("");
   const [redir, setRedir] = useRedirect();
 
   // toast msg will be displayed after the component has rendered 
@@ -54,7 +55,7 @@ export default function Register() {
     try {
       const res = await customAxios.post(
         `${process.env.REACT_APP_API}/api/v1/auth/register`,
-        { name, email, password, phone, address }
+        { name, email, password, phone, address, answer}
       );
 
       // console.log(res);
@@ -199,6 +200,27 @@ export default function Register() {
                       autoComplete="address"
                       value={address}
                       onChange={(evnt) => setAddress(evnt.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      fontFamily: "sans-serif",
+                    }}
+                  >
+                   What's your lucky number?
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="answer"
+                      label="Security Answer, make sure you remember!"
+                      name="answer"
+                      autoComplete="answer"
+                      value={answer}
+                      onChange={(evnt) => setAnswer(evnt.target.value)}
                     />
                   </Grid>
                   <Grid item xs={12}>
