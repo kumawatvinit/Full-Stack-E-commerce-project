@@ -19,5 +19,13 @@ router.get('/userauth', requireSignin, (req, res) => {
         ok: true
     });
 });
+router.get('/adminauth', requireSignin, isAdmin, (req, res) => {
+    // console.log("Request has reached the user-auth route");
+    res.status(200).json({
+        success: true,
+        message: 'Admin authenticated successfully',
+        ok: true
+    });
+});
 
 export default router;
