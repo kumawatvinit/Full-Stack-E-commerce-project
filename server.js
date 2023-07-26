@@ -5,6 +5,8 @@ import morgan from 'morgan';
 // HTTP request logger middleware for node.js
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoute.js';
+import categoryRoutes from './routes/categoryRoute.js';
+import productRoutes from './routes/productRoute.js';
 
 // nodemon
 // - Speedy development of node.js
@@ -30,6 +32,8 @@ app.use(morgan('dev'));
 
 // routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/category', categoryRoutes);
+app.use('/api/v1/product', productRoutes);
 
 app.get('/', (req,res) => {
     res.status(200).send('<h3>Welcome to Home page</h3>')
