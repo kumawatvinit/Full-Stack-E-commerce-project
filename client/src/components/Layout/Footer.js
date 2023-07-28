@@ -6,7 +6,11 @@ const Footer = () => {
     <div className="footer">
       <h4 className="text-center">
         All Rights Reserved &copy; 2023 | Made with ❤️ by{" "}
-        <a href="http://www.github.com/kumawatvinit" target="_blank">
+        <a
+          href="http://www.github.com/kumawatvinit"
+          target="_blank"
+          rel="noreferrer"
+        >
           kumawatvinit
         </a>
       </h4>

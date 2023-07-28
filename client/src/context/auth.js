@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useContext, createContext } from "react";
+import customAxios from "../pages/auth/customAxios";
 
 const AuthContext = createContext();
 
@@ -11,6 +12,7 @@ const AuthProvider = ({ children }) => {
 
   // default axios
   axios.defaults.headers.common["Authorization"] = auth?.token;
+  customAxios.defaults.headers.common["Authorization"] = auth?.token;
 
   //   It will run only once when the app starts,
   // and set the auth state if there is any data in localStorage

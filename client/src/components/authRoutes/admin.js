@@ -7,6 +7,7 @@ import Spinner from "../spinner";
 
 const AuthAdmin = () => {
   const [ok, setOk] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [auth, setAuth] = useAuth();
 
 

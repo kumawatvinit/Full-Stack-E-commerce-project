@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "../components/layout/header";
-import Footer from "../components/layout/footer";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { AiOutlineMail } from "react-icons/ai";
