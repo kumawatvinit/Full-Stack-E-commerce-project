@@ -6,7 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run dev`
+It will run server and client together using <a href="https://www.npmjs.com/package/concurrently">concurrently </a>
+Used cors To avoid cross origin error
+nodemon for speedy develoment.
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
