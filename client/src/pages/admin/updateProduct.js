@@ -4,22 +4,63 @@ import AdminMenu from "./../../components/layout/adminMenu";
 import { Select } from "antd";
 import customAxios from "./../auth/customAxios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import ProductCard from "../../components/layout/productCard";
 const { Option } = Select;
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [photo, setPhoto] = useState("");
   const [shipping, setShipping] = useState("");
+  const [id, setId] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [oldPhoto, setOldPhoto] = useState("");
+
+  const params = useParams();
 
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  // get product from server using slug
+  const getProduct = async () => {
+    try {
+      const { data } = await customAxios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
+      );
+
+      console.log(data);
+
+      if (data?.success) {
+        toast.success(data.message);
+        setId(data.product._id);
+        setName(data.product.name);
+        setDescription(data.product.description);
+        setPrice(data.product.price);
+        setCategory(data.product.category.name);
+        setQuantity(data.product.quantity);
+        setShipping(data.product.shipping);
+
+        setOldPhoto(`${process.env.REACT_APP_API}/api/v1/product/product-photo/${data.product._id}`);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else if (error.request) {
+        toast.error("Server is down!");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    }
+  };
 
   // handle submit
   const handleSubmit = async (event) => {
@@ -41,7 +82,7 @@ const CreateProduct = () => {
       setLoading(true);
 
       const { data } = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/create-product`,
+        `${process.env.REACT_APP_API}/api/v1/product/update-product`,
         formData
       );
 
@@ -120,10 +161,11 @@ const CreateProduct = () => {
 
   useEffect(() => {
     getAllCategories();
+    getProduct();
   }, []);
 
   return (
-    <Layout title={"Dashboard-Create Product"}>
+    <Layout title={"Dashboard-Update Product"}>
       <div className="container-fluid m-3 p-3">
         <div className="row">
           <div className="col-md-3">
@@ -131,7 +173,7 @@ const CreateProduct = () => {
           </div>
           <div className="col-md-9">
             <div className="card w-75 p-3">
-              <h1 className="card-header">Create Products</h1>
+              <h1 className="card-header">Update Products</h1>
 
               <div className="card-body">
                 <form onSubmit={handleSubmit}>
@@ -196,6 +238,7 @@ const CreateProduct = () => {
                       bordered={false}
                       allowClear={true}
                       size="large"
+                      value={category}
                       onChange={(value) => setCategory(value)}
                     >
                       {categories.map((aCategory) => (
@@ -213,6 +256,7 @@ const CreateProduct = () => {
                       placeholder="Please select a shipping option"
                       bordered={false}
                       size="large"
+                      value={shipping ? "1" : "0"}
                       onChange={(value) => setShipping(value)}
                       defaultActiveFirstOption={true}
                     >
@@ -265,24 +309,21 @@ const CreateProduct = () => {
                       className="form-control text-secondary"
                       onChange={(e) => {
                         setPhoto(e.target.files[0]);
-
-                        if (e.target.files[0]) {
-                          e.target.style.borderRightWidth = "3px";
-                          e.target.style.borderRightColor = "green";
-                          e.target.style.background =
-                            "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))";
-                        } else {
-                          e.target.style.borderRightWidth = "3px";
-                          e.target.style.borderRightColor = "red";
-                          e.target.style.background =
-                            "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))";
-                        }
                       }}
                       style={{
-                        cursor: "pointer",
                         borderRightWidth: "3px",
-                        borderRightColor: "red",
+                        cursor: "pointer",
+                        ...(oldPhoto
+                          ? {
+                              borderRightColor: "green",
+                              background: "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))",
+                            }
+                          : {
+                              borderRightColor: "red",
+                              background: "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))",
+                            }),
                       }}
+                      
                     />
                   </div>
 
@@ -315,21 +356,33 @@ const CreateProduct = () => {
                         !photo
                       }
                     >
-                      {loading ? "Loading..." : "Create Product"}
+                      {loading ? "Loading..." : "Update Product"}
                     </button>
                   </div>
                 </form>
               </div>
             </div>
           </div>
+            <div className="d-flex justify-content-center mt-4">
+              <h4>Product Preview</h4>
+            </div>
+            <div className="d-flex justify-content-center mt-4">
+              <ProductCard
+                id = {id}
+                // photo={photo}
+                title={name}
+                description={description}
+                price={price}
+                category={category}
+                quantity={quantity}
+                actions={false}
+                redirect={false}
+              />
+            </div>
         </div>
       </div>
     </Layout>
   );
 };
 
-export default CreateProduct;
-
-/*
-  Zod can be used for validation of input data.
-*/
+export default UpdateProduct;
