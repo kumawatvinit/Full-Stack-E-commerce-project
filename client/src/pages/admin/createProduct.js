@@ -5,6 +5,8 @@ import { Select } from "antd";
 import customAxios from "./../auth/customAxios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import ProductCard from './../../components/layout/productCard';
+import axios from "axios";
 const { Option } = Select;
 
 const CreateProduct = () => {
@@ -40,20 +42,18 @@ const CreateProduct = () => {
 
       setLoading(true);
 
-      const { data } = await customAxios.post(
+      const { data } = await axios.post(
         `${process.env.REACT_APP_API}/api/v1/product/create-product`,
         formData
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data?.success) {
         setLoading(false);
         toast.success(data.message);
 
-        setTimeout(() => {
-          toast("Redirecting to products page");
-        }, 2000);
+        toast("Redirecting to products page");
 
         setName("");
         setDescription("");
@@ -65,17 +65,15 @@ const CreateProduct = () => {
 
         setTimeout(() => {
           navigate("/dashboard/admin/products");
-        }, 5000);
+        }, 1500);
       }
     } catch (error) {
       setLoading(false);
       console.log(error);
 
       if (error.response) {
-        // request made and server responded
         toast.error(error.response.data.message);
       } else if (error.request) {
-        // server is down
         toast.error("Server is down!");
 
         setTimeout(() => {
@@ -94,7 +92,7 @@ const CreateProduct = () => {
         `${process.env.REACT_APP_API}/api/v1/category/categories`
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data?.success) {
         setCategories(response.data.categories);
@@ -103,10 +101,8 @@ const CreateProduct = () => {
       console.log(error);
 
       if (error.response) {
-        // request made and server responded
         toast.error(error.response.data.message);
       } else if (error.request) {
-        // server is down
         toast.error("Server is down!");
 
         setTimeout(() => {
@@ -265,23 +261,20 @@ const CreateProduct = () => {
                       className="form-control text-secondary"
                       onChange={(e) => {
                         setPhoto(e.target.files[0]);
-
-                        if (e.target.files[0]) {
-                          e.target.style.borderRightWidth = "3px";
-                          e.target.style.borderRightColor = "green";
-                          e.target.style.background =
-                            "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))";
-                        } else {
-                          e.target.style.borderRightWidth = "3px";
-                          e.target.style.borderRightColor = "red";
-                          e.target.style.background =
-                            "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))";
-                        }
                       }}
                       style={{
                         cursor: "pointer",
-                        borderRightWidth: "3px",
-                        borderRightColor: "red",
+                        ...(photo
+                          ? {
+                              borderRightColor: "green",
+                              background:
+                                "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))",
+                            }
+                          : {
+                              borderRightColor: "red",
+                              background:
+                                "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))",
+                            }),
                       }}
                     />
                   </div>
@@ -321,6 +314,24 @@ const CreateProduct = () => {
                 </form>
               </div>
             </div>
+          </div>
+
+          <div>
+          <div className="d-flex justify-content-center mt-4">
+                  <h4>Product Preview</h4>
+                </div>
+                <div className="d-flex justify-content-center mt-4">
+                  <ProductCard
+                    photo={photo? URL.createObjectURL(photo) : ""}
+                    title={name}
+                    description={description}
+                    price={price}
+                    category={category}
+                    quantity={quantity}
+                    actions={false}
+                    redirect={false}
+                  />
+                </div>
           </div>
         </div>
       </div>

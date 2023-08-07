@@ -1,25 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import customAxios from "./../../pages/auth/customAxios";
 
 const { Meta } = Card;
 
 const ProductCard = ({
-  id,
-  title,
+  id = null,
+  title = "title",
   description,
   slug,
-  imageUrl,
   price,
   quantity,
-  category,
+  category = "category",
   photo = null,
   actions = true,
   redirect = true,
 }) => {
+  const [imageSrc, setImageSrc] = useState(
+    process.env.PUBLIC_URL + "/ocean.jpeg"
+  );
   const navigate = useNavigate();
+
+  const fetchImageFromServer = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`
+      );
+      const data = await response.blob();
+      const ISrc = URL.createObjectURL(data);
+      setImageSrc(ISrc);
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  };
+
+  useEffect(() => {
+    if (id) fetchImageFromServer();
+  }, []);
+
   const handleHomeClick = () => {
     // we will redirect to product page
     toast.info("Redirecting to " + title);
@@ -34,21 +55,48 @@ const ProductCard = ({
     e.stopPropagation();
     toast.info("Redirecting to update page");
     setTimeout(() => {
-      navigate("/dashboard/admin/product/"+slug);
+      navigate("/dashboard/admin/product/" + slug);
     }, 2000);
   };
 
-  const handleDeleteClick = (e) => {
-    // first we will show a confirm dialog/modal
-    // if user clicks on yes,
-    // then we will delete the product,
-    // and show a success message
-    // else we will do nothing
+  const handleDeleteClick = async (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    toast.info("Deleting product");
-    setTimeout(() => {
-      navigate("/dashboard/admin/products");
-    }, 2000);
+
+    if (!id) return;
+
+    try {
+      let answer = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
+      if (!answer) return;
+
+      toast.info("Deleting product");
+      const response = await customAxios.delete(
+        `${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`
+      );
+
+      // console.log(response);
+
+      if (response.data.success) {
+        toast.success(title + " deleted successfully!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        toast.error(response.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else if (error.request) {
+        toast.error("Server is down!");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    }
   };
 
   return (
@@ -60,13 +108,13 @@ const ProductCard = ({
       cover={
         <img
           alt="example"
-        //   src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
-        src={
-          id ?
-           `${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}` :
-            photo ? photo :
-            "https://images.unsplash.com/photo-1690620368365-f0e394e1510e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0M3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-        }
+          //   src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
+          src={photo ? photo : imageSrc}
+          style={{
+            height: 280,
+            width: 300,
+            objectFit: "crop",
+          }}
         />
       }
       actions={
@@ -84,7 +132,9 @@ const ProductCard = ({
               />,
               <DeleteOutlined
                 key="delete"
-                onClick={handleDeleteClick}
+                onClick={(event) => {
+                  handleDeleteClick(event);
+                }}
                 style={{
                   fontSize: 18,
                   cursor: "pointer",
@@ -96,7 +146,7 @@ const ProductCard = ({
           : null
       }
       hoverable={true}
-      onClick={redirect? handleHomeClick: null}
+      onClick={redirect ? handleHomeClick : null}
     >
       <Meta
         title={title || "Card title"}

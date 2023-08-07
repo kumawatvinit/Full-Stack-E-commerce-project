@@ -1,12 +1,12 @@
-import express from 'express';
-import colors from 'colors';
-import dotenv from 'dotenv'
-import morgan from 'morgan';
+import express from "express";
+import colors from "colors";
+import dotenv from "dotenv";
+import morgan from "morgan";
 // HTTP request logger middleware for node.js
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoute.js';
-import categoryRoutes from './routes/categoryRoute.js';
-import productRoutes from './routes/productRoute.js';
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoute.js";
+import categoryRoutes from "./routes/categoryRoute.js";
+import productRoutes from "./routes/productRoute.js";
 
 // nodemon
 // - Speedy development of node.js
@@ -14,9 +14,9 @@ import productRoutes from './routes/productRoute.js';
 
 // To avoid cross origin error
 // 8080, 3000 origin error might occur
-import cors from 'cors';
+import cors from "cors";
 
-dotenv.config({path: './.env'});
+dotenv.config({ path: "./.env" });
 
 // connect to database
 connectDB();
@@ -28,19 +28,22 @@ const app = express();
 app.use(cors());
 // using default json parser provided by express, instead of body-parser
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 // routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/category', categoryRoutes);
-app.use('/api/v1/product', productRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/product", productRoutes);
 
-app.get('/', (req,res) => {
-    res.status(200).send('<h3>Welcome to Home page</h3>')
-})
+app.get("/", (req, res) => {
+  res.status(200).send("<h3>Welcome to Home page</h3>");
+});
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server listening on ${process.env.DEV_MODE} mode on port ${PORT}`.bgCyan.white);
-})
+  console.log(
+    `Server listening on ${process.env.DEV_MODE} mode on port ${PORT}`.bgCyan
+      .white
+  );
+});

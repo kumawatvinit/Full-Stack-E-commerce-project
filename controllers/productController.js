@@ -123,23 +123,17 @@ export const UpdateProductController = async (req, res) => {
           success: false,
           message: "Category is required",
         });
+      case !shipping:
+        // removeTmp(photo.path);
+        return res.status(400).json({
+          success: false,
+          message: "Shipping is required",
+        });
       case !quantity:
         // removeTmp(photo.path);
         return res.status(400).json({
           success: false,
           message: "Quantity is required",
-        });
-      case !photo.size>0:
-        // removeTmp(photo.path);
-        return res.status(400).json({
-          success: false,
-          message: "Image is required",
-        });
-      case photo.size > 1024 * 1024 * 2:
-        // removeTmp(photo.path);
-        return res.status(400).json({
-          success: false,
-          message: "Image size should be less than 2MB",
         });
     }
 
@@ -180,9 +174,9 @@ export const GetAllProductsController = async (req, res) => {
       .find({})
       .populate("category")
       .select("-photo")
-      .limit(10)
       .sort({ createdAt: -1 });
 
+      // .limit(10)
     return res.status(200).json({
       success: true,
       total: products.length,

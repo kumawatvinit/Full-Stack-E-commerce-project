@@ -3,13 +3,10 @@ import Layout from "./../../components/layout/layout";
 import AdminMenu from "../../components/layout/adminMenu";
 import { toast } from "react-toastify";
 import customAxios from "../auth/customAxios";
-import { useNavigate } from "react-router-dom";
 import ProductCard from "../../components/layout/productCard";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-
-  const navigate = useNavigate();
 
   const getAllProducts = async () => {
     try {
@@ -20,7 +17,7 @@ const Products = () => {
       console.log(data);
 
       if (data.success) {
-        toast.success(data.message);
+        // toast.success(data.message);
         setProducts(data.products);
 
         console.log(products);
@@ -31,10 +28,8 @@ const Products = () => {
       console.log(error);
 
       if (error.response) {
-        // request made and server responded
         toast.error(error.response.data.message);
       } else if (error.request) {
-        // server is down
         toast.error("Server is down!");
 
         // setTimeout(() => {
@@ -80,32 +75,19 @@ const Products = () => {
           <div className="col-md-9">
             <h1 className="text-center">All products</h1>
 
-            {/*
-            Second Task:
-            1. Add a floatingactionbutton to add new product
-            2. On clicking the button, redirect to create product page
-
-            Third Task:
-            1. Show a message if there are no products
-
-            Fourth Task:
-            1. Add a animation on hover of product card
-
-             */}
-
             {groupedProducts.flatMap((rowProducts, rowIndex) => (
               <div key={rowIndex} className="row mb-3">
                 {rowProducts.map((product) => (
                   <div key={product._id} className="col-md-4">
                     <ProductCard
-                      id = {product._id}
+                      id={product._id}
                       title={product.name}
                       description={product.description}
                       slug={product.slug}
                       imageUrl={null}
                       price={product.price}
                       quantity={product.quantity}
-                      category={product.category.name}
+                      category={product.category?.name || null}
                     />
                   </div>
                 ))}

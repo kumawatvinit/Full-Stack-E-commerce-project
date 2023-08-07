@@ -5,7 +5,7 @@ import { Select } from "antd";
 import customAxios from "./../auth/customAxios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import ProductCard from "../../components/layout/productCard";
+import ProductCard from './../../components/layout/productCard';
 const { Option } = Select;
 
 const UpdateProduct = () => {
@@ -33,10 +33,9 @@ const UpdateProduct = () => {
         `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data?.success) {
-        toast.success(data.message);
         setId(data.product._id);
         setName(data.product.name);
         setDescription(data.product.description);
@@ -44,8 +43,15 @@ const UpdateProduct = () => {
         setCategory(data.product.category.name);
         setQuantity(data.product.quantity);
         setShipping(data.product.shipping);
+        toast.success(data.message);
 
-        setOldPhoto(`${process.env.REACT_APP_API}/api/v1/product/product-photo/${data.product._id}`);
+        try {
+          setOldPhoto(
+            `${process.env.REACT_APP_API}/api/v1/product/product-photo/${data.product._id}`
+          );
+        } catch (error) {
+          toast.error("Something went wrong while fetching old photo!");
+        }
       } else {
         toast.error(data.message);
       }
@@ -77,36 +83,26 @@ const UpdateProduct = () => {
       formData.append("category", categoryObject._id);
       formData.append("quantity", quantity);
       formData.append("shipping", shipping === "1" ? true : false);
-      formData.append("photo", photo);
+      photo && formData.append("photo", photo);
 
       setLoading(true);
 
-      const { data } = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/update-product`,
+      const { data } = await customAxios.put(
+        `${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`,
         formData
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data?.success) {
-        setLoading(false);
         toast.success(data.message);
+        setLoading(false);
 
-        setTimeout(() => {
-          toast("Redirecting to products page");
-        }, 2000);
-
-        setName("");
-        setDescription("");
-        setPrice("");
-        setCategory("");
-        setQuantity("");
-        setPhoto("");
-        setShipping("");
-
+        toast("Redirecting to products page");
+        
         setTimeout(() => {
           navigate("/dashboard/admin/products");
-        }, 5000);
+        }, 1500);
       }
     } catch (error) {
       setLoading(false);
@@ -135,7 +131,7 @@ const UpdateProduct = () => {
         `${process.env.REACT_APP_API}/api/v1/category/categories`
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data?.success) {
         setCategories(response.data.categories);
@@ -313,25 +309,26 @@ const UpdateProduct = () => {
                       style={{
                         borderRightWidth: "3px",
                         cursor: "pointer",
-                        ...(oldPhoto
+                        ...(oldPhoto || photo
                           ? {
                               borderRightColor: "green",
-                              background: "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))",
+                              background:
+                                "linear-gradient(to right, rgb(174, 242, 229), rgb(166, 237, 164))",
                             }
                           : {
                               borderRightColor: "red",
-                              background: "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))",
+                              background:
+                                "linear-gradient(to right, rgb(252, 240, 230), rgb(255, 130, 125))",
                             }),
                       }}
-                      
                     />
                   </div>
 
-                  {photo && (
+                  {(oldPhoto || photo) && (
                     <div className="d-flex justify-content-center mt-3 col-md-6">
                       {/* // eslint-disable-next-line */}
                       <img
-                        src={URL.createObjectURL(photo)}
+                        src={photo ? URL.createObjectURL(photo) : oldPhoto}
                         alt="product image"
                         className="img-fluid img-responsive"
                       />
@@ -351,9 +348,8 @@ const UpdateProduct = () => {
                         !description ||
                         !price ||
                         !category ||
-                        !shipping ||
                         !quantity ||
-                        !photo
+                        !(oldPhoto || photo)
                       }
                     >
                       {loading ? "Loading..." : "Update Product"}
@@ -363,22 +359,32 @@ const UpdateProduct = () => {
               </div>
             </div>
           </div>
-            <div className="d-flex justify-content-center mt-4">
-              <h4>Product Preview</h4>
-            </div>
-            <div className="d-flex justify-content-center mt-4">
-              <ProductCard
-                id = {id}
-                // photo={photo}
-                title={name}
-                description={description}
-                price={price}
-                category={category}
-                quantity={quantity}
-                actions={false}
-                redirect={false}
-              />
-            </div>
+          <div>
+            {/* {isIdFetched ? ( */}
+              <>
+                <div className="d-flex justify-content-center mt-4">
+                  <h4>Product Preview</h4>
+                </div>
+                <div className="d-flex justify-content-center mt-4">
+                  <ProductCard
+                    photo={photo? URL.createObjectURL(photo) : oldPhoto}
+                    title={name}
+                    description={description}
+                    price={price}
+                    category={category}
+                    quantity={quantity}
+                    actions={false}
+                    redirect={false}
+                  />
+                </div>
+              </>
+            {/* ) : (
+              // Show a loading state while fetching the id
+              <div className="d-flex justify-content-center mt-4">
+                Loading...
+              </div>
+            )} */}
+          </div>
         </div>
       </div>
     </Layout>

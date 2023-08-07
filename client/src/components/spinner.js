@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/auth";
 
 const Spinner = ({ path = "/login" }) => {
-  const [count, setCount] = useState(2);
+  const [count, setCount] = useState(3);
+  const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -12,6 +14,13 @@ const Spinner = ({ path = "/login" }) => {
     }, 1000);
 
     if (count === 0) {
+      setAuth({
+        ...auth,
+        user: null,
+        token: "",
+      });
+      localStorage.removeItem("auth");
+
       navigate(`${path}`, {
         state: location.pathname,
       });
