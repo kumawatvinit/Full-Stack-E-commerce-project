@@ -285,7 +285,7 @@ export const GetPhotoController = async (req, res) => {
     console.log(error);
 
     return res.status(500).json({
-      success: fakse,
+      success: false,
       message: "Error in getting photo",
       error,
     });

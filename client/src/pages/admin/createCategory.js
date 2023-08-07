@@ -26,6 +26,11 @@ const CreateCategory = () => {
   const handleCreate = async (event) => {
     event.preventDefault();
 
+    if(category.length < 4) {
+      toast.error("Category name too short!");
+      return;
+    }
+
     try {
       const response = await customAxios.post(
         `${process.env.REACT_APP_API}/api/v1/category/create-category`,
@@ -55,6 +60,11 @@ const CreateCategory = () => {
   const handleUpdate = async (event) => {
     event.preventDefault();
 
+    if(updatedCategory.length < 4) {
+      toast.error("Category name too short!");
+      return;
+    }
+    
     try {
       const response = await customAxios.put(
         `${process.env.REACT_APP_API}/api/v1/category/update-category/${updatedCategoryId}`,
