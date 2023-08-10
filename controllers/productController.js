@@ -176,7 +176,7 @@ export const GetAllProductsController = async (req, res) => {
       .select("-photo")
       .sort({ createdAt: -1 });
 
-      // .limit(10)
+    // .limit(10)
     return res.status(200).json({
       success: true,
       total: products.length,
@@ -281,6 +281,80 @@ export const GetPhotoController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error in getting photo",
+      error,
+    });
+  }
+};
+
+// filter products
+export const ProductFilterController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+
+    let args = {};
+
+    if (checked.length > 0) args.category = checked;
+    if (radio.length)
+      args.price = {
+        $gte: radio[0],
+        $lte: radio[1],
+      };
+
+    const products = await productModel.find(args).populate("category");
+
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "Error in filtering products",
+      error,
+    });
+  }
+};
+
+// total products count
+export const TotalProductsController = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+
+    return res.status(200).json({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "Error in getting total products",
+      error,
+    });
+  }
+};
+
+// pagination
+export const ProductPerPageController = async (req, res) => {
+  try {
+    const page = req.params.page || 1;
+    const perPage = 5;
+
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .sort({ createdAt: -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage)
+      .populate("category");
+
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "Error in getting products per page",
       error,
     });
   }

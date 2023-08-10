@@ -54,6 +54,10 @@ const UpdateProduct = () => {
         }
       } else {
         toast.error(data.message);
+        
+        setTimeout(() => {
+          navigate("/dashboard/admin/products");
+        }, 1500);
       }
     } catch (error) {
       console.log(error);
@@ -73,6 +77,17 @@ const UpdateProduct = () => {
     event.preventDefault();
 
     try {
+      if(!id) {
+        toast.error("The product is missing!");
+        
+        setTimeout(() => {
+          navigate("/dashboard/admin/products");
+        }, 1500);
+      }
+      if (!name || !description || !price || !category || !quantity) {
+        toast.error("All fields are required!");
+        return;
+      }
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
