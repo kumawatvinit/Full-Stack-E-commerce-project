@@ -150,11 +150,13 @@ const ProductCard = ({
     >
       <Meta
         title={title || "Card title"}
-        description={description || "This is the description"}
+        description={
+          description && description.length > 30
+            ? description.substring(0, 35) + "..."
+            : description || "This is the description of the product"
+        }
       />
-      {/* style category also */}
       <div className="d-flex justify-content-between mt-2">
-        {/* Change font of price and quantity */}
         <div>Price: {price || "N/A"} Rs.</div>
         <div>Quantity: {quantity || "N/A"}</div>
       </div>

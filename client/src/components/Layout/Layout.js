@@ -12,6 +12,7 @@ const Layout = ({
   keywords,
   author,
   applyBackground = true,
+  bgcolor = null,
 }) => {
   return (
     <div
@@ -19,7 +20,9 @@ const Layout = ({
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        background: applyBackground
+        background: bgcolor
+          ? bgcolor
+          : applyBackground
           ? "linear-gradient(to left, #2b3038, #45608b, #273a2b)"
           : "none", // Set background to none if applyBackground is false
       }}
