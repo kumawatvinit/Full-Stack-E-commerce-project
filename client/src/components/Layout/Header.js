@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { useRedirect } from "../../context/redir";
+import SearchInput from "../forms/searchInput";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
@@ -27,6 +28,9 @@ const Header = () => {
               🛒 ShopSpot
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li className="nav-item me-3">
+                <SearchInput />
+              </li>
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home
@@ -104,17 +108,6 @@ const Header = () => {
                 </NavLink>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
           </div>
         </div>
       </nav>

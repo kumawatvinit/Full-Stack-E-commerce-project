@@ -8,16 +8,18 @@ import Register from "./pages/auth/register";
 import Login from "./pages/auth/login";
 import Dashboard from "./pages/user/dashboard";
 import AuthUser from "./components/authRoutes/user";
-import AuthAdmin from './components/authRoutes/admin';
+import AuthAdmin from "./components/authRoutes/admin";
 import ForgotPassword from "./pages/auth/forgotPassword";
-import AdminDashboard from './pages/admin/dashboard';
-import CreateCategory from './pages/admin/createCategory';
-import CreateProduct from './pages/admin/createProduct';
+import AdminDashboard from "./pages/admin/dashboard";
+import CreateCategory from "./pages/admin/createCategory";
+import CreateProduct from "./pages/admin/createProduct";
 import Users from "./pages/admin/users";
-import Orders from './pages/user/orders';
-import Profile from './pages/user/profile';
-import Products from './pages/admin/products';
+import Orders from "./pages/user/orders";
+import Profile from "./pages/user/profile";
+import Products from "./pages/admin/products";
 import UpdateProduct from "./pages/admin/updateProduct";
+import Search from "./pages/search";
+import ProductDetails from "./pages/productDetails";
 
 function App() {
   return (
@@ -43,6 +45,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/policy" element={<Policy />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
