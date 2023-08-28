@@ -26,7 +26,7 @@ const CreateCategory = () => {
   const handleCreate = async (event) => {
     event.preventDefault();
 
-    if(category.length < 4) {
+    if (category.length < 4) {
       toast.error("Category name too short!");
       return;
     }
@@ -60,11 +60,11 @@ const CreateCategory = () => {
   const handleUpdate = async (event) => {
     event.preventDefault();
 
-    if(updatedCategory.length < 4) {
+    if (updatedCategory.length < 4) {
       toast.error("Category name too short!");
       return;
     }
-    
+
     try {
       const response = await customAxios.put(
         `${process.env.REACT_APP_API}/api/v1/category/update-category/${updatedCategoryId}`,
@@ -131,7 +131,7 @@ const CreateCategory = () => {
   const getAllCategories = async () => {
     try {
       const response = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/category/categories`
+        `${process.env.REACT_APP_API}/api/v1/product/category-with-product-count`
       );
 
       console.log(response);
@@ -188,6 +188,7 @@ const CreateCategory = () => {
                       <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Category</th>
+                        <th scope="col">Products</th>
                         <th scope="col">Update</th>
                       </tr>
                     </thead>
@@ -196,6 +197,7 @@ const CreateCategory = () => {
                         <tr>
                           <th scope="row">{counter++}</th>
                           <td>{cat.name}</td>
+                          <td>{cat.count}</td>
                           <td>
                             <div className="d-flex justify-content-end">
                               <button

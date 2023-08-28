@@ -11,7 +11,6 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { Prices } from "./../components/prices.js";
 import axios from "axios";
-import { get, set } from "mongoose";
 
 const { Meta } = Card;
 
@@ -44,7 +43,7 @@ const HomePage = () => {
     try {
       setLoading(true);
       const { data } = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/category/categories`
+        `${process.env.REACT_APP_API}/api/v1/product/category-with-product-count`
       );
 
       setLoading(false);
@@ -191,7 +190,6 @@ const HomePage = () => {
                     key={category._id}
                   >
                     {category.count}
-                    12
                   </span>
                 </div>
               ))}
@@ -295,33 +293,39 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          <div>
-            <div className="d-flex justify-content-center m-4 p-3">
-              <button
-                className={`btn btn-dark mr-2 ${page === 1 ? "disabled" : ""}`}
-                onClick={() => {
-                  setPage(page - 1);
-                }}
-                disabled={!loading ? page === 1 : true}
-              >
-                Prev
-              </button>
-              <button className="btn btn-dark mx-2" disabled>
-                {page}
-              </button>
-              <button
-                className={`btn btn-dark ${
-                  page === Math.ceil(total / 5.0) ? "disabled" : ""
-                }`}
-                onClick={() => {
-                  setPage(page + 1);
-                }}
-                disabled={!loading ? page === Math.ceil(total / 5.0) : true}
-              >
-                Next
-              </button>
+          {checked.length || radio.length ? (
+            <div></div>
+          ) : (
+            <div>
+              <div className="d-flex justify-content-center m-4 p-3">
+                <button
+                  className={`btn btn-dark mr-2 ${
+                    page === 1 ? "disabled" : ""
+                  }`}
+                  onClick={() => {
+                    setPage(page - 1);
+                  }}
+                  disabled={!loading ? page === 1 : true}
+                >
+                  Prev
+                </button>
+                <button className="btn btn-dark mx-2" disabled>
+                  {page}
+                </button>
+                <button
+                  className={`btn btn-dark ${
+                    page === Math.ceil(total / 5.0) ? "disabled" : ""
+                  }`}
+                  onClick={() => {
+                    setPage(page + 1);
+                  }}
+                  disabled={!loading ? page === Math.ceil(total / 5.0) : true}
+                >
+                  Next
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </Layout>

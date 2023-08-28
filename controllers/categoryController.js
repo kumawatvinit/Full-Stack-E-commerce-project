@@ -1,5 +1,6 @@
 import categoryModel from "../models/categoryModel.js";
 import slugify from "slugify";
+import productModel from "../models/productModel.js";
 
 export const CreateCategoryController = async (req, res) => {
   try {
@@ -139,6 +140,9 @@ export const DeleteCategoryController = async (req, res) => {
                 message: "Category does not exist"
             });
         }
+
+        // Delete all products that reference this category
+        await productModel.deleteMany({ category: id });
 
         await categoryModel.findByIdAndDelete(id);
 

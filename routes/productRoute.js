@@ -12,6 +12,9 @@ import {
   ProductPerPageController,
   SearchProductController,
   RelatedProductController,
+  CategoriesWithProductCountController,
+  ProductByCategoryController,
+  TotalProductsCountByCategoryController,
 } from "../controllers/productController.js";
 // formidable is a Node.js module for parsing form data, especially file uploads.
 import formidable from "express-formidable";
@@ -67,5 +70,14 @@ router.get("/search/:keyword", SearchProductController);
 
 // similar products
 router.get("/related-products/:pid", RelatedProductController);
+
+// count products by category
+router.get("/category-with-product-count/", CategoriesWithProductCountController);
+
+// products by category
+router.get("/products-by-category/:slug/:page", ProductByCategoryController);
+
+// total product count by category
+router.get("/total-products-by-category/:slug", TotalProductsCountByCategoryController);
 
 export default router;

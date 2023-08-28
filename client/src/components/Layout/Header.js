@@ -3,10 +3,12 @@ import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { useRedirect } from "../../context/redir";
 import SearchInput from "../forms/searchInput";
+import useCategory from "./../../hooks/useCategory";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
   const [redir, setRedir] = useRedirect();
+  const categories = useCategory();
 
   return (
     <>
@@ -36,10 +38,55 @@ const Header = () => {
                   Home
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/category" className="nav-link">
-                  Category
+              <li className="nav-item dropdown">
+                <NavLink
+                  className="nav-link dropdown-toggle"
+                  to={"/categories"}
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Categories
                 </NavLink>
+                <ul
+                  className="dropdown-menu"
+                  style={{
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    borderRadius: "10px 10px",
+                  }}
+                >
+                  <li>
+                    <NavLink to={"/categories"} className="dropdown-item">
+                      All Categories
+                    </NavLink>
+                  </li>
+                  {categories?.map((c) => (
+                    // put the span to right corner, and name to left corner, put little margin in right corner if required
+                    <li>
+                      <NavLink
+                        to={`/category/${c.slug}`}
+                        className="dropdown-item d-flex justify-content-between nav-link-item"
+                      >
+                        <style>
+                          {`
+                            .nav-link-item:hover {
+                              background-color: #f0f0f0;
+                            }
+                          `}
+                        </style>
+                        <span>{c.name}</span>
+                        <span
+                          // reduce the size of the badge
+                          className="badge bg-success rounded-pill"
+                          key={c._id}
+                        >
+                          {c.count}
+                        </span>
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
               </li>
               {auth.user ? (
                 <>

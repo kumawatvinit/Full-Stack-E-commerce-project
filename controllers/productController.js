@@ -1,4 +1,5 @@
 import productModel from "../models/productModel.js";
+import categoryModel from "../models/categoryModel.js";
 import slugify from "slugify";
 import fs from "fs";
 
@@ -410,6 +411,97 @@ export const RelatedProductController = async (req, res) => {
     return res.status(400).send({
       success: false,
       message: "Error in finding related products",
+      error,
+    });
+  }
+};
+
+// categories with product count in each category
+export const CategoriesWithProductCountController = async (req, res) => {
+  try {
+    const categories = await categoryModel.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "category",
+          as: "products",
+        },
+      },
+      {
+        $addFields: {
+          count: { $size: "$products" },
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      categories,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "Error in getting categories with product count",
+      error,
+    });
+  }
+};
+
+// get products by category
+export const ProductByCategoryController = async (req, res) => {
+  try {
+    const page = req.params.page || 1;
+    const perPage = 5;
+
+    const category = await categoryModel.findOne({ slug: req.params.slug });
+    const products = await productModel
+      .find({ category })
+      .select("-photo")
+      .sort({ createdAt: -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage)
+      .populate("category");
+
+    return res.status(200).json({
+      success: true,
+      category,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      success: false,
+      message: "Error in getting products by category",
+      error,
+    });
+  }
+};
+
+// total products count by category
+export const TotalProductsCountByCategoryController = async (req, res) => {
+  try {
+    const category = await categoryModel.findOne({ slug: req.params.slug });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    // Count the total number of products in the found category
+    const total = await productModel.countDocuments({ category });
+
+    return res.status(200).json({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "Error in getting total products by category",
       error,
     });
   }
