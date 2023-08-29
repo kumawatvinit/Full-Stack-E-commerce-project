@@ -6,10 +6,12 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { useSearch } from "../context/search";
 import Layout from "./../components/layout/layout";
+import { useCart } from "../context/cart";
 const { Meta } = Card;
 
 const Search = () => {
   const [values, setValues] = useSearch();
+  const [cart, setCart] = useCart();
   const navigate = useNavigate();
 
   return (
@@ -58,8 +60,22 @@ const Search = () => {
                 />,
                 <HiOutlineShoppingCart
                   key="cart"
-                  onClick={(event) => {
-                    toast.info("Adding to cart");
+                  onClick={() => {
+                    setCart(() => {
+                      const newCart = new Map(cart); // Create a new map
+                      if (newCart.has(product._id)) {
+                        newCart.get(product._id).count += 1;
+                      } else {
+                        newCart.set(product._id, { product, count: 1 });
+                      }
+                      localStorage.setItem(
+                        "cart",
+                        JSON.stringify(Array.from(newCart.entries()))
+                      );
+                      toast.success(product.name + " added to cart");
+                      return newCart;
+                    });
+                    // toast.success(product.name + "added to cart");
                   }}
                   style={{
                     fontSize: 20,

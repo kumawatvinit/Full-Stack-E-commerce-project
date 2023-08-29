@@ -6,12 +6,17 @@ import customAxios from "./../auth/customAxios";
 import CategoryCreateForm from "../../components/forms/categoryCreateForm";
 import { Modal } from "antd";
 import CategoryUpdateForm from "../../components/forms/categoryUpdateForm";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+
+const { confirm } = Modal;
+
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
 
   // modal
   const [visible, setVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
+  const [count, setCount] = useState(0);
 
   // create category
   const [category, setCategory] = useState("");
@@ -215,6 +220,7 @@ const CreateCategory = () => {
                                 onClick={() => {
                                   setUpdatedCategoryId(cat._id);
                                   setUpdatedCategory(cat.name);
+                                  setCount(cat.count);
                                   setDeleteVisible(true);
                                 }}
                               >
@@ -257,12 +263,16 @@ const CreateCategory = () => {
             okText="Delete"
             okButtonProps={{ danger: true }}
           >
-            {/* set the text type as muted text of the below p tag */}
-
-            <span className="text-muted">
-              Are you sure you want to delete{" "}
-              <b className="text-success">'{updatedCategory}'</b> category?
-            </span>
+            <div>
+              <p className="text-muted">
+                Are you sure you want to delete{" "}
+                <b className="text-success">'{updatedCategory}'</b> category?
+              </p>
+              <span className="text-danger fw-bold">
+                All {count} products associated to this category will be
+                deleted!
+              </span>
+            </div>
           </Modal>
         </div>
       </div>

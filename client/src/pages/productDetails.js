@@ -4,10 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { toast } from "react-toastify";
+import { useCart } from "../context/cart";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [cart, setCart] = useCart();
 
   const params = useParams();
   const navigate = useNavigate();
@@ -128,6 +130,22 @@ const ProductDetails = () => {
                 background: "#007bff",
                 border: "1px solid #007bff",
               }}
+              onClick={() => {
+                setCart(() => {
+                  const newCart = new Map(cart); // Create a new map
+                  if (newCart.has(product._id)) {
+                    newCart.get(product._id).count += 1;
+                  } else {
+                    newCart.set(product._id, { product, count: 1 });
+                  }
+                  localStorage.setItem(
+                    "cart",
+                    JSON.stringify(Array.from(newCart.entries()))
+                  );
+                  toast.success(product.name + " added to cart");
+                  return newCart;
+                });
+              }}
             >
               Add to Cart
             </button>
@@ -202,7 +220,27 @@ const ProductDetails = () => {
                     />
                   </div>
                   <div className="d-flex align-items-center">
-                    <button className="btn btn-primary">Add to Cart</button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setCart(() => {
+                          const newCart = new Map(cart); // Create a new map
+                          if (newCart.has(product._id)) {
+                            newCart.get(product._id).count += 1;
+                          } else {
+                            newCart.set(product._id, { product, count: 1 });
+                          }
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify(Array.from(newCart.entries()))
+                          );
+                          toast.success(product.name + " added to cart");
+                          return newCart;
+                        });
+                      }}
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               </div>

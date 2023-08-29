@@ -4,10 +4,13 @@ import { useAuth } from "../../context/auth";
 import { useRedirect } from "../../context/redir";
 import SearchInput from "../forms/searchInput";
 import useCategory from "./../../hooks/useCategory";
+import { useCart } from "../../context/cart";
+import { Avatar, Badge } from "antd";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
   const [redir, setRedir] = useRedirect();
+  const [cart, setCart] = useCart();
   const categories = useCategory();
 
   return (
@@ -29,7 +32,7 @@ const Header = () => {
             <Link to="/" className="navbar-brand">
               🛒 ShopSpot
             </Link>
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 me-2">
               <li className="nav-item me-3">
                 <SearchInput />
               </li>
@@ -151,7 +154,22 @@ const Header = () => {
               )}
               <li className="nav-item">
                 <NavLink to="/cart" className="nav-link">
-                  Cart(0)
+                  <Badge
+                    count={cart?.size}
+                    color="#9d174d"
+                    size="large"
+                    showZero
+                    offset={[12, 0]}
+                  >
+                    <div
+                      style={{
+                        fontSize: "17px",
+                        fontFamily: "Poppins",
+                      }}
+                    >
+                      Cart
+                    </div>
+                  </Badge>
                 </NavLink>
               </li>
             </ul>
