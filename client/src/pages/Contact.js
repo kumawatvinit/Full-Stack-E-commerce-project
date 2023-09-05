@@ -26,7 +26,7 @@ const Contact = () => {
                 City, State 12345
               </p>
               <p>
-                <AiOutlineMail /> Email: info@shopshot.com
+                <AiOutlineMail /> Email: contact.shopspot@gmail.com
               </p>
               <p>
                 <FaPhoneAlt /> Phone: (123) 456-7890

@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layout/layout";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
-import { Link, useNavigate } from "react-router-dom";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import PlusIcon from "@mui/icons-material/Add";
+import MinusIcon from "@mui/icons-material/Remove";
+import {
+  MdArrowCircleRight,
+  MdDoubleArrow,
+  MdLocationOn,
+} from "react-icons/md";
 
 const CartPage = () => {
   const [cart, setCart] = useCart();
@@ -19,6 +25,16 @@ const CartPage = () => {
     (total, item) => total + item[1].product.price * item[1].count,
     0
   );
+
+  const [animation, setAnimation] = useState(true);
+
+  // Toggle the animation direction
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimation(!animation);
+    }, 1000); // Adjust the duration as needed
+    return () => clearInterval(interval);
+  }, [animation]);
 
   return (
     <Layout title={"Cart-ShopSpot"}>
@@ -115,7 +131,7 @@ const CartPage = () => {
                                 disabled={count === 1}
                                 size="large"
                               >
-                                <MinusOutlined />
+                                <MinusIcon sx={{ color: "#f50057" }} />
                               </Button>
                               <Button onClick={() => {}} size="large">
                                 <b>{count}</b>
@@ -141,7 +157,7 @@ const CartPage = () => {
                                 }}
                                 size="large"
                               >
-                                <PlusOutlined />
+                                <PlusIcon color="success" />
                               </Button>
                             </ButtonGroup>
                             <button
@@ -172,45 +188,127 @@ const CartPage = () => {
             })}
           </div>
 
-          <div className="col-md-3">
-            <div className="d-flex flex-row justify-content-end">
-              <button
-                className="btn btn-primary"
-                disabled={cart.size === 0}
-                onClick={() => {
-                  navigate("/checkout");
-                }}
-              >
-                Checkout | Payment
-              </button>
+          <div className="col-md-6">
+            <div className="d-flex flex-column justify-content-end">
+              <div className="card p-3">
+                <h5 className="card-title">Cart Summary</h5>
+                <hr className="border-dark" />
 
-              <button
-                className="btn btn-primary ms-2"
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                Continue Shopping
-              </button>
-            </div>
-            <div className="d-flex flex-row justify-content-end mt-3">
-              <h4>Total Price: &#8377;{totalPrice}</h4>
+                <div className="d-flex justify-content-between">
+                  <h4>Total: &#8377;{totalPrice}</h4>
+                  <div style={{ maxWidth: "200px" }}>
+                    <NavLink className="btn btn-info w-100" to="/">
+                      Continue Shopping
+                    </NavLink>
+                  </div>
+                </div>
 
-              <button
-                className="btn btn-danger "
-                onClick={() => {
-                  setCart(() => {
-                    const newCart = new Map(); // Create a new map
-                    localStorage.setItem(
-                      "cart",
-                      JSON.stringify(Array.from(newCart.entries()))
-                    );
-                    return newCart;
-                  });
-                }}
-              >
-                Clear Cart
-              </button>
+                <div className="d-flex justify-content-between align-items-end">
+                  <div style={{ maxWidth: "200px" }}>
+                    <button
+                      className="btn btn-danger mt-3 w-100"
+                      onClick={() => {
+                        setCart(() => {
+                          const newCart = new Map(); // Create a new map
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify(Array.from(newCart.entries()))
+                          );
+                          return newCart;
+                        });
+                      }}
+                    >
+                      Clear Cart
+                    </button>
+                  </div>
+
+                  <div
+                    className="d-flex flex-row justify-content-end mt-3"
+                    style={{ maxWidth: "400px" }}
+                  >
+                    {auth?.user?.address ? (
+                      <>
+                        <div
+                          className="address-box border border-dark p-2"
+                          style={{ fontFamily: "Arial", fontSize: "14px" }}
+                        >
+                          <div
+                            className="text-black p-3 border"
+                            style={{ backgroundColor: "#e3faee" }}
+                          >
+                            <MdLocationOn style={{ fontSize: "24px" }} />
+                            <strong>Current Address</strong>
+                          </div>
+                          <div
+                            className="address-content overflow-auto p-3 border"
+                            style={{ backgroundColor: "#92d6b2" }}
+                          >
+                            {auth.user.address}
+                          </div>
+                          <NavLink
+                            className="text-decoration-none"
+                            to="/dashboard/user/profile"
+                            style={{
+                              color: "black",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              padding: "10px",
+                              backgroundColor: "rgb(255, 193, 7)",
+                              border: "1px solid #000",
+                            }}
+                          >
+                            <span>Change Current Addresss</span>
+                            <MdDoubleArrow style={{ fontSize: "24px" }} />
+                          </NavLink>
+                        </div>
+                      </>
+                    ) : (
+                      <div>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => navigate("/login", { state: "/cart" })}
+                        >
+                          Please Login
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-end">
+                  <div
+                    className="mt-3"
+                    style={{
+                      maxWidth: "200px",
+                      border: "1px solid #000",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <NavLink
+                      className={`text-decoration-none ${
+                        animation ? "shining-line" : ""
+                      }`}
+                      to="/checkout"
+                      style={{
+                        color: "black",
+                        backgroundColor: "#c7b9ff", // Green color
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "10px",
+                        position: "relative",
+                        overflow: "hidden",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <span>Checkout</span>
+                      <div className="line-animation"></div>
+                      <MdArrowCircleRight style={{ fontSize: "24px" }} />
+                    </NavLink>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

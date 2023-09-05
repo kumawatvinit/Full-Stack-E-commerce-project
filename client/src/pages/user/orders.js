@@ -12,7 +12,7 @@ const Orders = () => {
           </div>
           <div className="col-md-9">
             <div className="card w-75 p-3">
-              <h1 className="card-header">All Orders</h1>
+              <h1 className="card-header d-flex justify-content-center">All Orders</h1>
             </div>
           </div>
         </div>

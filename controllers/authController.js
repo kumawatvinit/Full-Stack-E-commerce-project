@@ -2,34 +2,51 @@ import { comparePassword, hashPassword } from "../helpers/authHelper.js";
 import userModel from "../models/userModel.js";
 import Jwt from "jsonwebtoken";
 
+const nullCheck = (
+  name = "name",
+  email = "email",
+  password = "password",
+  answer = "temp"
+) => {
+  // null check
+  if (!name) {
+    return {
+      success: false,
+      message: "Name is required",
+    };
+  }
+  if (!email) {
+    return {
+      success: false,
+      message: "Email is required",
+    };
+  }
+  if (!password && password.length < 6) {
+    return {
+      success: false,
+      message: "Password is empty or less than 6 characters",
+    };
+  }
+  if (!answer) {
+    return {
+      success: false,
+      message: "Answer is required",
+    };
+  }
+  return {
+    success: true,
+    message: "Null check passed",
+  };
+};
+
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
 
     // null check
-    if (!name) {
-      return res.status(400).json({
-        success: false,
-        message: "Name is required",
-      });
-    }
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required",
-      });
-    }
-    if (!password) {
-      return res.status(400).json({
-        success: false,
-        message: "Password is required",
-      });
-    }
-    if (!answer) {
-      return res.status(400).json({
-        success: false,
-        message: "Answer is required",
-      });
+    const nullCheckResult = nullCheck(name, email, password, answer);
+    if (!nullCheckResult.success) {
+      return res.status(400).json(nullCheckResult);
     }
 
     // user already exists?
@@ -134,23 +151,10 @@ export const forgotPasswordController = async (req, res) => {
     const { email, password, answer } = req.body;
     // console.log(req.body);
 
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required",
-      });
-    }
-    if (!answer) {
-      return res.status(400).json({
-        success: false,
-        message: "Answer is required",
-      });
-    }
-    if (!password) {
-      return res.status(400).json({
-        success: false,
-        message: "New password is required",
-      });
+    // null check
+    const nullCheckResult = nullCheck("name", email, password, answer);
+    if (!nullCheckResult.success) {
+      return res.status(400).json(nullCheckResult);
     }
 
     // does user even exists?
@@ -196,4 +200,45 @@ export const forgotPasswordController = async (req, res) => {
 // test controller
 export const testController = (req, res) => {
   res.send("Protected route");
+};
+
+// update profile controller
+export const updateProfileController = async (req, res) => {
+  try {
+    const { name, email, password, phone, address } = req.body;
+
+    if (password && password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is empty or less than 6 characters",
+      });
+    }
+
+    const hashedPassword = password ? await hashPassword(password) : undefined;
+    const user = await userModel.findOne({ email });
+
+    const updateUser = await userModel.findByIdAndUpdate(
+      user._id,
+      {
+        name: name || user.name,
+        password: hashedPassword || user.password,
+        phone: phone || user.phone,
+        address: address || user.address,
+      },
+      { new: true }
+    );
+
+    return res.status(200).send({
+      success: true,
+      message: "Profile updated successfully",
+      updateUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error in updating profile",
+      error,
+    });
+  }
 };

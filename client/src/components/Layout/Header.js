@@ -5,7 +5,7 @@ import { useRedirect } from "../../context/redir";
 import SearchInput from "../forms/searchInput";
 import useCategory from "./../../hooks/useCategory";
 import { useCart } from "../../context/cart";
-import { Avatar, Badge } from "antd";
+import { Badge } from "antd";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
@@ -101,7 +101,7 @@ const Header = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      {auth?.user?.name}
+                      {auth?.user?.name || "Buddy"}
                     </NavLink>
                     <ul className="dropdown-menu">
                       <li>

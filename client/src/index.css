@@ -282,3 +282,34 @@ font-family: 'Poppins', sans-serif; */
     margin-bottom: 15px;
     line-height: 1.5;
 }
+
+/* Shining line animation */
+.shining-line {
+    /* Add any other styles you want for the Checkout NavLink */
+    position: relative;
+    overflow: hidden; /* Hide the overflowing part of the line */
+  }
+  
+  /* Keyframes animation for the shining line effect */
+  @keyframes lineAnimation {
+    0% {
+      left: -100%; /* Start from the left of the parent element */
+    }
+    100% {
+      left: 100%; /* Move to the right of the parent element */
+    }
+  }
+  
+  /* Apply the lineAnimation to the element with the line-animation class */
+  .line-animation {
+    width: 100%; /* Occupy the entire width of the parent element */
+    height: 2px; /* Adjust the height as needed */
+    background-color: white; /* Adjust the color as needed */
+    position: absolute; /* Position within the shining-line container */
+    bottom: 0; /* Align the line to the bottom of the container */
+    left: 0; /* Initially position it to the left of the container */
+    animation: lineAnimation 3s linear infinite; /* Adjust the animation duration as needed */
+    /* box-shadow: 0px -4px 6px #dcd9d980; */
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.7);
+    border-radius: 5px 5px 0px 0px;
+  }
