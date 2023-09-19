@@ -1,31 +1,52 @@
 import React, { useEffect, useState } from "react";
-import UserMenu from "../../components/layout/userMenu";
+import AdminMenu from "./../../components/layout/adminMenu";
 import Layout from "../../components/layout/layout";
 import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { Select } from "antd";
 
-const Orders = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+const { Option } = Select;
+
+const AdminOrders = () => {
+  const [status, setStatus] = useState([
+    "Pending",
+    "Processing",
+    "Shipped",
+    "Delivered",
+    "Cancelled",
+  ]);
   const [order, setOrder] = useState([]);
 
+  const getOrders = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/all-orders`
+      );
+
+      setOrder(data.orders);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in getting orders");
+    }
+  };
+
   useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API}/api/v1/product/orders`,
-          { user }
-        );
-
-        setOrder(data.orders);
-      } catch (error) {
-        console.log(error);
-        toast.error("Error in getting orders");
-      }
-    };
-
     getOrders();
   }, []);
+
+  const handleChange = async (id, value) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API}/api/v1/product/update-order-status/${id}`,
+        { status: value }
+      );
+
+      getOrders();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   function getStatusSpan(status) {
     let color, fontWeight, backgroundColor;
@@ -78,17 +99,15 @@ const Orders = () => {
   }
 
   return (
-    <Layout title={"Dashboard-Orders"}>
+    <Layout title={"All Orders"}>
       <div className="container-fluid m-3 p-3">
         <div className="row">
           <div className="col-md-3">
-            <UserMenu />
+            <AdminMenu />
           </div>
           <div className="col-md-9">
-            <div className="card w-75 p-3">
-              <h1 className="card-header d-flex justify-content-center">
-                All Orders
-              </h1>
+            <div className="card w-80 p-2">
+              <h1 className="card-header text-center">All Orders</h1>
 
               <div className="card-body table-responsive">
                 <table className="table table-striped table-hover table-bordered">
@@ -96,6 +115,7 @@ const Orders = () => {
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Product</th>
+                      <th scope="col">Buyer</th>
                       <th scope="col">Date</th>
                       <th scope="col">Amount</th>
                       <th scope="col">Status</th>
@@ -108,7 +128,7 @@ const Orders = () => {
                         <td>
                           {order.products.map((item, j) => (
                             <div key={j} className="row align-items-center">
-                              <div className="col-md-4">
+                              <div className="col-md-3">
                                 <img
                                   src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${item.product._id}`}
                                   alt={item.product.name}
@@ -120,7 +140,7 @@ const Orders = () => {
                                   }}
                                 />
                               </div>
-                              <div className="col-md-8">
+                              <div className="col-md-6">
                                 <h5>{item.product.name}</h5>
                                 <p style={{ fontFamily: "monospace" }}>
                                   Price: &#8377;{item.product.price}
@@ -138,10 +158,25 @@ const Orders = () => {
                             </div>
                           ))}
                         </td>
+                        <td>{order.buyer.name}</td>
 
                         <td>{moment(order.createdAt).fromNow()}</td>
                         <td>&#8377;{order.payment.transaction.amount}</td>
-                        <td>{getStatusSpan(order.status)}</td>
+                        <td>
+                          <Select
+                            bordered={false}
+                            onChange={(value) => handleChange(order._id, value)}
+                            defaultValue={order.status}
+                            width={100}
+                            dropdownStyle={{ minWidth: '120px' }}
+                          >
+                            {status.map((s, idx) => (
+                              <Option key={idx} value={s}>
+                                {getStatusSpan(s)}
+                              </Option>
+                            ))}
+                          </Select>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -155,4 +190,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default AdminOrders;

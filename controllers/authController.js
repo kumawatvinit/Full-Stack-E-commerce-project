@@ -242,3 +242,48 @@ export const updateProfileController = async (req, res) => {
     });
   }
 };
+
+// get all users
+export const GetAllUsersController = async (req, res) => {
+  try {
+    const users = await userModel.find({});
+
+    return res.status(200).json({
+      success: true,
+      message: "Get all users successfully",
+      users,
+    });
+  } catch(error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error in getting all users",
+      error,
+    })
+  }
+};
+
+// change role of a user
+export const ChangeRoleController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    const user = await userModel.findByIdAndUpdate(id, {
+      role,
+    }, { new: true });
+
+    return res.status(200).json({
+      success: true,
+      message: "Role changed successfully",
+      user,
+    })
+  } catch(error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error in changing role",
+      error,
+    })
+  }
+};

@@ -11,10 +11,16 @@ import {
   MdDoubleArrow,
   MdLocationOn,
 } from "react-icons/md";
+import { toast } from "react-toastify";
+import axios from "axios";
+import DropIn from "braintree-web-drop-in-react";
 
 const CartPage = () => {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
+  const [clientToken, setClientToken] = useState("");
+  const [instance, setInstance] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const ButtonGroup = Button.Group;
   const navigate = useNavigate();
@@ -35,6 +41,54 @@ const CartPage = () => {
     }, 1000); // Adjust the duration as needed
     return () => clearInterval(interval);
   }, [animation]);
+
+  const getToken = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/braintree/get-token`
+      );
+
+      setClientToken(data.clientToken);
+      // console.log(data.clientToken);
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Error in getting braintree token");
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, [auth?.token]);
+
+  const handlePayment = async () => {
+    try {
+      setLoading(true);
+      const { nonce } = await instance.requestPaymentMethod();
+
+      const productsArray = Array.from(cart.values());
+
+      // console.log(productsArray);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/braintree/payment`,
+        { nonce, productsArray }
+      );
+
+      toast.success("Payment Successfull");
+      setLoading(false);
+
+      localStorage.removeItem("cart");
+      setCart(new Map());
+
+      setTimeout(() => {
+        navigate("/dashboard/user/orders");
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in making payment");
+      setLoading(false);
+    }
+  };
 
   return (
     <Layout title={"Cart-ShopSpot"}>
@@ -217,6 +271,7 @@ const CartPage = () => {
                           return newCart;
                         });
                       }}
+                      disabled={cart.size === 0}
                     >
                       Clear Cart
                     </button>
@@ -241,7 +296,7 @@ const CartPage = () => {
                           </div>
                           <div
                             className="address-content overflow-auto p-3 border"
-                            style={{ backgroundColor: "#92d6b2" }}
+                            // style={{ backgroundColor: "#92d6b2" }}
                           >
                             {auth.user.address}
                           </div>
@@ -264,51 +319,104 @@ const CartPage = () => {
                         </div>
                       </>
                     ) : (
-                      <div>
+                      <div
+                        className="mt-3"
+                        style={{
+                          maxWidth: "200px",
+                          borderBottom: "1px solid #000",
+                          borderRadius: "5px",
+                        }}
+                      >
                         <button
-                          className="btn btn-primary"
+                          className={`text-decoration-none ${
+                            animation ? "shining-line" : ""
+                          }`}
                           onClick={() => navigate("/login", { state: "/cart" })}
+                          style={{
+                            color: "black",
+                            backgroundColor: "#c7b9ff", // Green color
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "10px",
+                            position: "relative",
+                            overflow: "hidden",
+                            border: "1px solid #000",
+                            borderRadius: "5px",
+                          }}
                         >
-                          Please Login
+                          <span>Login</span>
+                          <div className="line-animation"></div>
+                          <MdArrowCircleRight style={{ fontSize: "24px" }} />
                         </button>
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-end">
-                  <div
-                    className="mt-3"
-                    style={{
-                      maxWidth: "200px",
-                      border: "1px solid #000",
-                      borderRadius: "5px",
+                {/* {auth?.user ? (
+                  <div className="d-flex justify-content-end">
+                    
+                  </div>
+                ) : (
+                  <></>
+                )} */}
+              </div>
+            </div>
+
+            <div className="mt-2">
+              {!clientToken || !cart.size ? (
+                <></>
+              ) : (
+                <>
+                  <h4 className="text-center">Pay with Braintree</h4>
+                  <hr className="border-dark" />
+                  <DropIn
+                    options={{
+                      authorization: clientToken,
+                      // paypal: { flow: "vault", },
                     }}
-                  >
-                    <NavLink
-                      className={`text-decoration-none ${
-                        animation ? "shining-line" : ""
-                      }`}
-                      to="/checkout"
+                    onInstance={(instance) => setInstance(instance)}
+                  />
+
+                  <div className="d-flex justify-content-center">
+                    <div
+                      className="mt-3"
                       style={{
-                        color: "black",
-                        backgroundColor: "#c7b9ff", // Green color
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "10px",
-                        position: "relative",
-                        overflow: "hidden",
+                        maxWidth: "150px",
+                        borderBottom: "1px solid #000",
                         borderRadius: "5px",
+                        marginBottom: "20px",
                       }}
                     >
-                      <span>Checkout</span>
-                      <div className="line-animation"></div>
-                      <MdArrowCircleRight style={{ fontSize: "24px" }} />
-                    </NavLink>
+                      <button
+                        className={`text-decoration-none ${
+                          animation ? "shining-line" : ""
+                        }`}
+                        onClick={handlePayment}
+                        style={{
+                          color: "black",
+                          backgroundColor: "#c7b9ff", // Green color
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          position: "relative",
+                          overflow: "hidden",
+                          border: "1px solid #000",
+                          borderRadius: "5px",
+                          width: "150px",
+                        }}
+                        disabled={loading || !instance || !auth?.user?.address}
+                      >
+                        <span>{loading ? "Loading..." : "Pay now"}</span>
+                        <div className="line-animation"></div>
+                        <MdArrowCircleRight style={{ fontSize: "24px" }} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>

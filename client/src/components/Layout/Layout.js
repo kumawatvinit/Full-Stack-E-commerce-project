@@ -22,8 +22,10 @@ const Layout = ({
         minHeight: "100vh",
         background: bgcolor
           ? bgcolor
-          : applyBackground
-          ? "linear-gradient(to left, #2b3038, #45608b, #273a2b)"
+          // : applyBackground
+          // : "1a1a1a"
+          // ? "linear-gradient(to left, #2b3038, #45608b, #273a2b)"
+          // ? "1a1a1a"
           : "none", // Set background to none if applyBackground is false
       }}
     >

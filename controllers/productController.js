@@ -2,6 +2,18 @@ import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
 import slugify from "slugify";
 import fs from "fs";
+import braintree from "braintree";
+import orderModel from "../models/orderModel.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+var gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 export const CreateProductController = async (req, res) => {
   try {
@@ -502,6 +514,82 @@ export const TotalProductsCountByCategoryController = async (req, res) => {
     return res.status(400).send({
       success: false,
       message: "Error in getting total products by category",
+      error,
+    });
+  }
+};
+
+// payment gateway api
+export const GetBraintreeTokenController = async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, function (err, response) {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send(response);
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error in getting braintree token",
+      error,
+    });
+  }
+};
+
+export const BraintreePaymentController = async (req, res) => {
+  try {
+    const { nonce, productsArray } = req.body;
+    let total = productsArray.reduce(
+      (total, item) => total + item.product.price * item.count,
+      0
+    );
+
+    let transaction = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      function (error, result) {
+        if (result) {
+          // console.log(JSON.stringify(result));
+
+          const order = new orderModel({
+            products: productsArray.map((item) => ({
+              product: item.product._id, 
+              count: item.count,
+            })),
+            payment: result,
+            buyer: req.user._id,
+          }).save();
+
+          console.log(order);
+
+          return res.status(200).json({
+            success: true,
+            message: "Payment successful",
+            order,
+          });
+        } else {
+          // console.error(result.message);
+
+          return res.status(500).json({
+            success: false,
+            message: "Payment failed",
+            error,
+          });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error in braintree payment",
       error,
     });
   }
