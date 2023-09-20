@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
 import productRoutes from "./routes/productRoute.js";
 import path from "path";
+import { fileURLToPath } from "url";
 
 // nodemon
 // - Speedy development of node.js
@@ -21,6 +22,10 @@ dotenv.config({ path: "./.env" });
 
 // connect to database
 connectDB();
+
+// __dirname is not available in ES6 module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // rest object
 const app = express();
