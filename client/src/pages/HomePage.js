@@ -160,6 +160,12 @@ const HomePage = () => {
 
   return (
     <Layout title={"ShopSpot-Home"} description={"Node React E-commerce App"}>
+      <img
+        src="/banner.png"
+        className="banner-img"
+        alt="bannerimage"
+        width={"100%"}
+      />
       <div className="row">
         <div className="col-md-3">
           <div className="filters-container bg-light p-4 rounded shadow m-4">

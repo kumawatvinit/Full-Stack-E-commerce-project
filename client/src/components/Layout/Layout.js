@@ -11,8 +11,8 @@ const Layout = ({
   description,
   keywords,
   author,
-  applyBackground = true,
-  bgcolor = null,
+  // applyBackground = true,
+  // bgcolor = null,
 }) => {
   return (
     <div
@@ -20,13 +20,16 @@ const Layout = ({
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        background: bgcolor
-          ? bgcolor
+        // background: 
+          // bgcolor
+          // ? bgcolor
           // : applyBackground
           // : "1a1a1a"
           // ? "linear-gradient(to left, #2b3038, #45608b, #273a2b)"
           // ? "1a1a1a"
-          : "none", // Set background to none if applyBackground is false
+
+          // :
+          //  "none", // Set background to none if applyBackground is false
       }}
     >
       <Helmet>

@@ -23,7 +23,7 @@ const Contact = () => {
               <h3>ShopShot</h3>
               <p>
                 <MdLocationOn /> 123 Main Street <br />
-                City, State 12345
+                Jpr, Raj 12345
               </p>
               <p>
                 <AiOutlineMail /> Email: contact.shopspot@gmail.com
@@ -48,7 +48,9 @@ const Contact = () => {
                 placeholder="Message"
               ></textarea>
             </div>
-            <button type="submit">Send Message</button>
+            <button type="submit"
+            onClick={() => alert("Thank you for reaching out! We'll get back to you soon.")}
+            >Send Message</button>
           </div>
         </div>
       </div>

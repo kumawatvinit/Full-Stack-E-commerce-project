@@ -67,12 +67,12 @@ const ProductDetails = () => {
         <div className="col-md-6 text-center">
           <div
             style={{
-              background: "linear-gradient(to bottom, #0c0c0c, #111111)",
+              // background: "linear-gradient(to bottom, #0c0c0c, #111111)",
               border: "5px solid #1a1a1a",
               padding: "20px",
               borderRadius: "10px",
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-              color: "#e0e0e0",
+              color: "black",
               marginLeft: "20px",
             }}
           >
@@ -155,12 +155,12 @@ const ProductDetails = () => {
       <hr />
       <div className="row container mt-3">
         {relatedProducts?.length < 1 && (
-          <h2 className="text-center mb-3" style={{ color: "#e0e0e0" }}>
+          <h2 className="text-center mb-3" style={{ color: "black" }}>
             No Related Products found!
           </h2>
         )}
         {relatedProducts?.length > 0 && (
-          <h2 className="text-center mb-3" style={{ color: "#e0e0e0" }}>
+          <h2 className="text-center mb-3" style={{ color: "black" }}>
             Related Products
           </h2>
         )}
@@ -169,12 +169,12 @@ const ProductDetails = () => {
             <div
               className="card"
               style={{
-                background: "linear-gradient(to bottom, #0c0c0c, #111111)",
+                // background: "linear-gradient(to bottom, #0c0c0c, #111111)",
                 border: "5px solid #1a1a1a",
                 padding: "20px",
                 borderRadius: "10px",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-                color: "#e0e0e0",
+                color: "black",
                 marginBottom: "20px",
                 marginLeft: "20px",
                 marginRight: "20px",
@@ -191,7 +191,7 @@ const ProductDetails = () => {
                 <h5 className="card-title">{product.name}</h5>
                 <p className="card-text">
                   {product.description && product.description.length > 30
-                    ? product.description.substring(0, 40) + "..."
+                    ? product.description.substring(0, 30) + "..."
                     : product.description ||
                       "This is the description of the product"}
                 </p>
