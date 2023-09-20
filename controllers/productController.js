@@ -93,7 +93,7 @@ export const CreateProductController = async (req, res) => {
       products,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -171,7 +171,7 @@ export const UpdateProductController = async (req, res) => {
       products,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -197,7 +197,7 @@ export const GetAllProductsController = async (req, res) => {
       products,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -227,7 +227,7 @@ export const GetProductController = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -257,7 +257,7 @@ export const DeleteProductController = async (req, res) => {
       message: "Product deleted successfully",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -289,7 +289,7 @@ export const GetPhotoController = async (req, res) => {
       message: "No photo found",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -481,7 +481,7 @@ export const ProductByCategoryController = async (req, res) => {
       products,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(400).json({
       success: false,
@@ -527,7 +527,7 @@ export const GetBraintreeTokenController = async (req, res) => {
       return res.status(200).send(response);
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -566,7 +566,7 @@ export const BraintreePaymentController = async (req, res) => {
             buyer: req.user._id,
           }).save();
 
-          console.log(order);
+          // console.log(order);
 
           return res.status(200).json({
             success: true,
@@ -585,7 +585,7 @@ export const BraintreePaymentController = async (req, res) => {
       }
     );
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,

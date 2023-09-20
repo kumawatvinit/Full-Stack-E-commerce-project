@@ -51,7 +51,7 @@ const CartPage = () => {
       setClientToken(data.clientToken);
       // console.log(data.clientToken);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       toast.error("Error in getting braintree token");
     }
@@ -84,7 +84,7 @@ const CartPage = () => {
         navigate("/dashboard/user/orders");
       }, 2000);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error("Error in making payment");
       setLoading(false);
     }

@@ -32,7 +32,7 @@ const AuthAdmin = () => {
           setOk(false);
         }
       } catch (err) {
-        console.log("Error in AuthAdmin.js: ", err);
+        // console.log("Error in AuthAdmin.js: ", err);
         setOk(false);
       }
     };

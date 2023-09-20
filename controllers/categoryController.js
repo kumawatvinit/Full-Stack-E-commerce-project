@@ -33,7 +33,7 @@ export const CreateCategoryController = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,
@@ -72,7 +72,7 @@ export const UpdateCategoryController = async (req, res) => {
             updatedCategory
         });
     } catch(error) {
-        console.log(error);
+        // console.log(error);
         return res.status(500).json({
             success: false,
             message: "Error in category updation",
@@ -91,7 +91,7 @@ export const GetAllCategoriesController = async (req, res) => {
             categories
         });
     } catch(error) {
-        console.log(error);
+        // console.log(error);
 
         return res.status(500).json({
             success: false,
@@ -118,7 +118,7 @@ export const GetCategoryController = async (req, res) => {
             category
         });
     } catch(error) {
-        console.log(error);
+        // console.log(error);
         
         return res.status(500).json({
             success: false,
@@ -151,7 +151,7 @@ export const DeleteCategoryController = async (req, res) => {
             message: "Category deleted successfully"
         });
     } catch(error) {
-        console.log(error);
+        // console.log(error);
 
         return res.status(500).json({
             success: false,

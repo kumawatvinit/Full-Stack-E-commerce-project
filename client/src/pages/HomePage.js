@@ -56,7 +56,7 @@ const HomePage = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);
@@ -84,7 +84,7 @@ const HomePage = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);
@@ -107,7 +107,7 @@ const HomePage = () => {
 
       setTotal(data?.total);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -146,7 +146,7 @@ const HomePage = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);

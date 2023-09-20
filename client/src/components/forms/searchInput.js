@@ -21,7 +21,7 @@ const SearchInput = () => {
 
       navigate(`/search?${values.keyword}`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

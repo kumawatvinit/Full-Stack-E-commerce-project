@@ -15,7 +15,7 @@ export const requireSignin = (req, res, next) => {
         3. token modified
             => tampered token
         */
-        console.log(error);
+        // console.log(error);
 
         return res.status(500).json({
             success: false,
@@ -43,7 +43,7 @@ export const isAdmin = async (req, res, next) => {
             1. User not found
             2. User found but not admin
         */
-        console.log(error);
+        // console.log(error);
 
         return res.status(500).json({
             success: false,

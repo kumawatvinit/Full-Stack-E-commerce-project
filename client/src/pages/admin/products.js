@@ -14,18 +14,18 @@ const Products = () => {
         `${process.env.REACT_APP_API}/api/v1/product/products`
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         // toast.success(data.message);
         setProducts(data.products);
 
-        console.log(products);
+        // console.log(products);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);

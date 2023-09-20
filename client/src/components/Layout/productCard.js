@@ -87,7 +87,7 @@ const ProductCard = ({
         toast.error(response.data?.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);

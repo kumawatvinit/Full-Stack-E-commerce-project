@@ -47,7 +47,7 @@ const CategoryProducts = () => {
 
       setTotal(data?.total);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

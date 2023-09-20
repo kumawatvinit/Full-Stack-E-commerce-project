@@ -77,7 +77,7 @@ export const registerController = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({
       success: false,
       message: "Error in registering user",
@@ -137,7 +137,7 @@ export const loginController = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({
       success: false,
       message: "Error in logging user",
@@ -188,7 +188,7 @@ export const forgotPasswordController = async (req, res) => {
       message: "Password reset successful",
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({
       success: false,
       message: "Error in resetting password",
@@ -234,7 +234,7 @@ export const updateProfileController = async (req, res) => {
       updateUser,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({
       success: false,
       message: "Error in updating profile",
@@ -278,7 +278,7 @@ export const ChangeRoleController = async (req, res) => {
       user,
     })
   } catch(error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(500).json({
       success: false,

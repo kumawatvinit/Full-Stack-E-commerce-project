@@ -19,7 +19,7 @@ const Orders = () => {
 
         setOrder(data.orders);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error("Error in getting orders");
       }
     };

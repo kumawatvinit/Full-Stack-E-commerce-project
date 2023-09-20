@@ -54,7 +54,7 @@ const CreateCategory = () => {
         toast.error("Something went wrong!");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       toast.error(error.response?.data);
       toast.error("Something went wrong!");
@@ -76,7 +76,7 @@ const CreateCategory = () => {
         { name: updatedCategory }
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data?.success) {
         getAllCategories();
@@ -88,7 +88,7 @@ const CreateCategory = () => {
         toast.error(response.data?.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       toast.error(error.response?.data);
       toast.error("Something went wrong!");
@@ -104,7 +104,7 @@ const CreateCategory = () => {
         `${process.env.REACT_APP_API}/api/v1/category/delete-category/${updatedCategoryId}`
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data.success) {
         getAllCategories();
@@ -116,7 +116,7 @@ const CreateCategory = () => {
         toast.error(response.data?.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);
@@ -139,13 +139,13 @@ const CreateCategory = () => {
         `${process.env.REACT_APP_API}/api/v1/product/category-with-product-count`
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data?.success) {
         setCategories(response.data.categories);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         // request made and server responded

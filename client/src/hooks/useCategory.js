@@ -12,7 +12,7 @@ export default function useCategory() {
 
             setCategories(data?.categories);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 

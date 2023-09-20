@@ -69,7 +69,7 @@ const CreateProduct = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);
@@ -98,7 +98,7 @@ const CreateProduct = () => {
         setCategories(response.data.categories);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);

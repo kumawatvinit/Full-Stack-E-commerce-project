@@ -35,7 +35,7 @@ const AuthUser = () => {
           setOk(false);
         }
       } catch (err) {
-        console.log("Error in AuthUser.js: ", err);
+        // console.log("Error in AuthUser.js: ", err);
         setOk(false);
       }
     };

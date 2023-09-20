@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
 import productRoutes from "./routes/productRoute.js";
+import path from "path";
 
 // nodemon
 // - Speedy development of node.js
@@ -29,11 +30,17 @@ app.use(cors());
 // using default json parser provided by express, instead of body-parser
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 // routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
+
+// rest api
+app.use("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 app.get("/", (req, res) => {
   res.status(200).send("<h3>Welcome to Home page</h3>");

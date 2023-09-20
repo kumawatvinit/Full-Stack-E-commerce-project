@@ -22,7 +22,7 @@ const ProductDetails = () => {
 
       setProduct(data?.product);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -34,7 +34,7 @@ const ProductDetails = () => {
 
       setRelatedProducts(data?.products);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

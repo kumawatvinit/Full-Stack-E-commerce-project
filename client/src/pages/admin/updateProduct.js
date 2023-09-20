@@ -60,7 +60,7 @@ const UpdateProduct = () => {
         }, 1500);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         toast.error(error.response.data.message);
@@ -121,7 +121,7 @@ const UpdateProduct = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         // request made and server responded
@@ -152,7 +152,7 @@ const UpdateProduct = () => {
         setCategories(response.data.categories);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
 
       if (error.response) {
         // request made and server responded

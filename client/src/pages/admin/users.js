@@ -19,7 +19,7 @@ const Users = () => {
 
       setUsers(data.users);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -36,7 +36,7 @@ const Users = () => {
 
       getUsers();
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
