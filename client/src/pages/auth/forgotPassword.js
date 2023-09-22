@@ -32,10 +32,11 @@ export default function ForgotPassword() {
     try {
       // console.log(email, password, answer);
 
-      const res = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/forgot-password`,
-        { email, password, answer }
-      );
+      const res = await customAxios.post(`/api/v1/auth/forgot-password`, {
+        email,
+        password,
+        answer,
+      });
 
       // console.log(res);
 

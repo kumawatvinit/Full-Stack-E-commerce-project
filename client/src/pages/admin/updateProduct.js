@@ -5,7 +5,7 @@ import { Select } from "antd";
 import customAxios from "./../auth/customAxios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import ProductCard from './../../components/layout/productCard';
+import ProductCard from "./../../components/layout/productCard";
 const { Option } = Select;
 
 const UpdateProduct = () => {
@@ -30,7 +30,7 @@ const UpdateProduct = () => {
   const getProduct = async () => {
     try {
       const { data } = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
+        `/api/v1/product/single-product/${params.slug}`
       );
 
       // console.log(data);
@@ -46,15 +46,13 @@ const UpdateProduct = () => {
         toast.success(data.message);
 
         try {
-          setOldPhoto(
-            `${process.env.REACT_APP_API}/api/v1/product/product-photo/${data.product._id}`
-          );
+          setOldPhoto(`/api/v1/product/product-photo/${data.product._id}`);
         } catch (error) {
           toast.error("Something went wrong while fetching old photo!");
         }
       } else {
         toast.error(data.message);
-        
+
         setTimeout(() => {
           navigate("/dashboard/admin/products");
         }, 1500);
@@ -77,9 +75,9 @@ const UpdateProduct = () => {
     event.preventDefault();
 
     try {
-      if(!id) {
+      if (!id) {
         toast.error("The product is missing!");
-        
+
         setTimeout(() => {
           navigate("/dashboard/admin/products");
         }, 1500);
@@ -103,7 +101,7 @@ const UpdateProduct = () => {
       setLoading(true);
 
       const { data } = await customAxios.put(
-        `${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`,
+        `/api/v1/product/update-product/${id}`,
         formData
       );
 
@@ -114,7 +112,7 @@ const UpdateProduct = () => {
         setLoading(false);
 
         toast("Redirecting to products page");
-        
+
         setTimeout(() => {
           navigate("/dashboard/admin/products");
         }, 1500);
@@ -142,9 +140,7 @@ const UpdateProduct = () => {
   // fetch all categories
   const getAllCategories = async () => {
     try {
-      const response = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/category/categories`
-      );
+      const response = await customAxios.get(`/api/v1/category/categories`);
 
       // console.log(response);
 
@@ -376,23 +372,23 @@ const UpdateProduct = () => {
           </div>
           <div>
             {/* {isIdFetched ? ( */}
-              <>
-                <div className="d-flex justify-content-center mt-4">
-                  <h4>Product Preview</h4>
-                </div>
-                <div className="d-flex justify-content-center mt-4">
-                  <ProductCard
-                    photo={photo? URL.createObjectURL(photo) : oldPhoto}
-                    title={name}
-                    description={description}
-                    price={price}
-                    category={category}
-                    quantity={quantity}
-                    actions={false}
-                    redirect={false}
-                  />
-                </div>
-              </>
+            <>
+              <div className="d-flex justify-content-center mt-4">
+                <h4>Product Preview</h4>
+              </div>
+              <div className="d-flex justify-content-center mt-4">
+                <ProductCard
+                  photo={photo ? URL.createObjectURL(photo) : oldPhoto}
+                  title={name}
+                  description={description}
+                  price={price}
+                  category={category}
+                  quantity={quantity}
+                  actions={false}
+                  redirect={false}
+                />
+              </div>
+            </>
             {/* ) : (
               // Show a loading state while fetching the id
               <div className="d-flex justify-content-center mt-4">

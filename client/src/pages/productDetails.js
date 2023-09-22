@@ -17,7 +17,7 @@ const ProductDetails = () => {
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
+        `/api/v1/product/single-product/${params.slug}`
       );
 
       setProduct(data?.product);
@@ -29,7 +29,7 @@ const ProductDetails = () => {
   const getRelatedProducts = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/related-products/${product._id}`
+        `/api/v1/product/related-products/${product._id}`
       );
 
       setRelatedProducts(data?.products);
@@ -57,7 +57,7 @@ const ProductDetails = () => {
       <div className="row container mt-5">
         <div className="col-md-6">
           <img
-            src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+            src={`/api/v1/product/product-photo/${product._id}`}
             className="card-img-top"
             alt={product.name}
             height={500}
@@ -181,7 +181,7 @@ const ProductDetails = () => {
               }}
             >
               <img
-                src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+                src={`/api/v1/product/product-photo/${product._id}`}
                 className="card-img-top"
                 alt={product.name}
                 height={300}

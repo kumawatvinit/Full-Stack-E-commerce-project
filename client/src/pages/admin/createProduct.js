@@ -5,7 +5,7 @@ import { Select } from "antd";
 import customAxios from "./../auth/customAxios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import ProductCard from './../../components/layout/productCard';
+import ProductCard from "./../../components/layout/productCard";
 import axios from "axios";
 const { Option } = Select;
 
@@ -43,7 +43,7 @@ const CreateProduct = () => {
       setLoading(true);
 
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/create-product`,
+        `/api/v1/product/create-product`,
         formData
       );
 
@@ -88,9 +88,7 @@ const CreateProduct = () => {
   // fetch all categories
   const getAllCategories = async () => {
     try {
-      const response = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/category/categories`
-      );
+      const response = await customAxios.get(`/api/v1/category/categories`);
 
       // console.log(response);
 
@@ -317,21 +315,21 @@ const CreateProduct = () => {
           </div>
 
           <div>
-          <div className="d-flex justify-content-center mt-4">
-                  <h4>Product Preview</h4>
-                </div>
-                <div className="d-flex justify-content-center mt-4">
-                  <ProductCard
-                    photo={photo? URL.createObjectURL(photo) : ""}
-                    title={name}
-                    description={description}
-                    price={price}
-                    category={category}
-                    quantity={quantity}
-                    actions={false}
-                    redirect={false}
-                  />
-                </div>
+            <div className="d-flex justify-content-center mt-4">
+              <h4>Product Preview</h4>
+            </div>
+            <div className="d-flex justify-content-center mt-4">
+              <ProductCard
+                photo={photo ? URL.createObjectURL(photo) : ""}
+                title={name}
+                description={description}
+                price={price}
+                category={category}
+                quantity={quantity}
+                actions={false}
+                redirect={false}
+              />
+            </div>
           </div>
         </div>
       </div>

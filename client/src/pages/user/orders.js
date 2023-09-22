@@ -12,10 +12,7 @@ const Orders = () => {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API}/api/v1/product/orders`,
-          { user }
-        );
+        const { data } = await axios.get(`/api/v1/product/orders`, { user });
 
         setOrder(data.orders);
       } catch (error) {
@@ -110,7 +107,7 @@ const Orders = () => {
                             <div key={j} className="row align-items-center">
                               <div className="col-md-4">
                                 <img
-                                  src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${item.product._id}`}
+                                  src={`/api/v1/product/product-photo/${item.product._id}`}
                                   alt={item.product.name}
                                   className="img-fluid"
                                   style={{

@@ -13,7 +13,7 @@ const SearchInput = () => {
     try {
       toast("Searching...");
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/search/${values.keyword}`
+        `/api/v1/product/search/${values.keyword}`
       );
       // toast.success(`${data.products.length} products found`);
 

@@ -10,9 +10,7 @@ const Products = () => {
 
   const getAllProducts = async () => {
     try {
-      const { data } = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/products`
-      );
+      const { data } = await customAxios.get(`/api/v1/product/products`);
 
       // console.log(data);
 

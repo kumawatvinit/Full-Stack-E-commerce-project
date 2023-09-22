@@ -26,9 +26,7 @@ const ProductCard = ({
 
   const fetchImageFromServer = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`
-      );
+      const response = await fetch(`/api/v1/product/product-photo/${id}`);
       const data = await response.blob();
       const ISrc = URL.createObjectURL(data);
       setImageSrc(ISrc);
@@ -73,7 +71,7 @@ const ProductCard = ({
 
       toast.info("Deleting product");
       const response = await customAxios.delete(
-        `${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`
+        `/api/v1/product/delete-product/${id}`
       );
 
       // console.log(response);
@@ -108,7 +106,7 @@ const ProductCard = ({
       cover={
         <img
           alt="example"
-          //   src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
+          //   src={`/api/v1/product/product-photo/${id}`}
           src={photo ? photo : imageSrc}
           style={{
             height: 280,

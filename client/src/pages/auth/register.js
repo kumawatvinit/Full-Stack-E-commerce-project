@@ -13,7 +13,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/layout/layout";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +32,8 @@ export default function Register() {
   const [answer, setAnswer] = useState("");
   const [redir, setRedir] = useRedirect();
 
-  // toast msg will be displayed after the component has rendered 
-  // and the state has been updated. 
+  // toast msg will be displayed after the component has rendered
+  // and the state has been updated.
   // This should ensure that the toast msg shows up properly when the user is redirected
   useEffect(() => {
     if (redir.msg) {
@@ -53,10 +53,14 @@ export default function Register() {
     const name = firstName + " " + lastName;
 
     try {
-      const res = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/register`,
-        { name, email, password, phone, address, answer}
-      );
+      const res = await customAxios.post(`/api/v1/auth/register`, {
+        name,
+        email,
+        password,
+        phone,
+        address,
+        answer,
+      });
 
       // console.log(res);
 
@@ -202,7 +206,9 @@ export default function Register() {
                       onChange={(evnt) => setAddress(evnt.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={12}
+                  <Grid
+                    item
+                    xs={12}
                     sx={{
                       display: "flex",
                       flexDirection: "column",
@@ -210,7 +216,7 @@ export default function Register() {
                       fontFamily: "sans-serif",
                     }}
                   >
-                   What's your lucky number?
+                    What's your lucky number?
                   </Grid>
                   <Grid item xs={12}>
                     <TextField

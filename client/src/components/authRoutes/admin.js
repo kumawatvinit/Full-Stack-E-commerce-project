@@ -10,19 +10,14 @@ const AuthAdmin = () => {
   // eslint-disable-next-line no-unused-vars
   const [auth, setAuth] = useAuth();
 
-
   useEffect(() => {
-
     const authCheck = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API}/api/v1/auth/adminauth`,
-          {
-            headers: {
-              Authorization: auth?.token,
-            },
-          }
-        );
+        const res = await axios.get(`/api/v1/auth/adminauth`, {
+          headers: {
+            Authorization: auth?.token,
+          },
+        });
         // console.log("Request has been made to the Admin-auth route", res.data);
 
         // console.log(res.data);

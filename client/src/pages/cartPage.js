@@ -44,9 +44,7 @@ const CartPage = () => {
 
   const getToken = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/braintree/get-token`
-      );
+      const { data } = await axios.get(`/api/v1/product/braintree/get-token`);
 
       setClientToken(data.clientToken);
       // console.log(data.clientToken);
@@ -69,10 +67,10 @@ const CartPage = () => {
       const productsArray = Array.from(cart.values());
 
       // console.log(productsArray);
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/braintree/payment`,
-        { nonce, productsArray }
-      );
+      const { data } = await axios.post(`/api/v1/product/braintree/payment`, {
+        nonce,
+        productsArray,
+      });
 
       toast.success("Payment Successfull");
       setLoading(false);
@@ -139,7 +137,7 @@ const CartPage = () => {
                     <div className="row g-0">
                       <div className="col-md-4">
                         <img
-                          src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+                          src={`/api/v1/product/product-photo/${product._id}`}
                           alt={product.name}
                           className="img-fluid"
                           style={{

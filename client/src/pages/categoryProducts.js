@@ -25,7 +25,7 @@ const CategoryProducts = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/products-by-category/${params.slug}/${page}`
+        `/api/v1/product/products-by-category/${params.slug}/${page}`
       );
       setLoading(false);
 
@@ -41,7 +41,7 @@ const CategoryProducts = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/total-products-by-category/${params.slug}`
+        `/api/v1/product/total-products-by-category/${params.slug}`
       );
       setLoading(false);
 
@@ -80,7 +80,7 @@ const CategoryProducts = () => {
                   cover={
                     <img
                       alt="example"
-                      src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+                      src={`/api/v1/product/product-photo/${product._id}`}
                       style={{
                         height: 280,
                         width: 300,

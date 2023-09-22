@@ -38,7 +38,7 @@ const CreateCategory = () => {
 
     try {
       const response = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/category/create-category`,
+        `/api/v1/category/create-category`,
         { name: category }
       );
 
@@ -72,7 +72,7 @@ const CreateCategory = () => {
 
     try {
       const response = await customAxios.put(
-        `${process.env.REACT_APP_API}/api/v1/category/update-category/${updatedCategoryId}`,
+        `/api/v1/category/update-category/${updatedCategoryId}`,
         { name: updatedCategory }
       );
 
@@ -101,7 +101,7 @@ const CreateCategory = () => {
 
     try {
       const response = await customAxios.delete(
-        `${process.env.REACT_APP_API}/api/v1/category/delete-category/${updatedCategoryId}`
+        `/api/v1/category/delete-category/${updatedCategoryId}`
       );
 
       // console.log(response);
@@ -136,7 +136,7 @@ const CreateCategory = () => {
   const getAllCategories = async () => {
     try {
       const response = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/category-with-product-count`
+        `/api/v1/product/category-with-product-count`
       );
 
       // console.log(response);

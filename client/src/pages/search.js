@@ -36,7 +36,7 @@ const Search = () => {
               cover={
                 <img
                   alt="example"
-                  src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+                  src={`/api/v1/product/product-photo/${product._id}`}
                   style={{
                     height: 280,
                     width: 300,

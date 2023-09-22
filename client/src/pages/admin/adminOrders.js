@@ -20,9 +20,7 @@ const AdminOrders = () => {
 
   const getOrders = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/all-orders`
-      );
+      const { data } = await axios.get(`/api/v1/product/all-orders`);
 
       setOrder(data.orders);
     } catch (error) {
@@ -38,7 +36,7 @@ const AdminOrders = () => {
   const handleChange = async (id, value) => {
     try {
       const { data } = await axios.put(
-        `${process.env.REACT_APP_API}/api/v1/product/update-order-status/${id}`,
+        `/api/v1/product/update-order-status/${id}`,
         { status: value }
       );
 
@@ -130,7 +128,7 @@ const AdminOrders = () => {
                             <div key={j} className="row align-items-center">
                               <div className="col-md-3">
                                 <img
-                                  src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${item.product._id}`}
+                                  src={`/api/v1/product/product-photo/${item.product._id}`}
                                   alt={item.product.name}
                                   className="img-fluid"
                                   style={{
@@ -168,7 +166,7 @@ const AdminOrders = () => {
                             onChange={(value) => handleChange(order._id, value)}
                             defaultValue={order.status}
                             width={100}
-                            dropdownStyle={{ minWidth: '120px' }}
+                            dropdownStyle={{ minWidth: "120px" }}
                           >
                             {status.map((s, idx) => (
                               <Option key={idx} value={s}>

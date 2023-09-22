@@ -48,10 +48,10 @@ export default function Login() {
     event.preventDefault();
 
     try {
-      const res = await customAxios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/login`,
-        { email, password }
-      );
+      const res = await customAxios.post(`/api/v1/auth/login`, {
+        email,
+        password,
+      });
 
       // console.log(res);
 

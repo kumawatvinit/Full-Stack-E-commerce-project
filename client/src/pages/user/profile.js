@@ -24,10 +24,13 @@ const Profile = () => {
     event.preventDefault();
 
     try {
-      const {data} = await axios.put(
-        `${process.env.REACT_APP_API}/api/v1/auth/update-profile`,
-        { name, email, password, phone, address }
-      );
+      const { data } = await axios.put(`/api/v1/auth/update-profile`, {
+        name,
+        email,
+        password,
+        phone,
+        address,
+      });
 
       // console.log(res);
 

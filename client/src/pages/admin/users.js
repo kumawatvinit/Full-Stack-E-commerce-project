@@ -13,9 +13,7 @@ const Users = () => {
 
   const getUsers = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/all-users`
-      );
+      const { data } = await axios.get(`/api/v1/product/all-users`);
 
       setUsers(data.users);
     } catch (error) {
@@ -29,10 +27,9 @@ const Users = () => {
 
   const handleChange = async (value, id) => {
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_API}/api/v1/product/change-role/${id}`,
-        { role: value }
-      );
+      const { data } = await axios.put(`/api/v1/product/change-role/${id}`, {
+        role: value,
+      });
 
       getUsers();
     } catch (error) {
@@ -77,7 +74,9 @@ const Users = () => {
                               <Select
                                 bordered={false}
                                 defaultValue={user.role ? "Admin" : "User"}
-                                onChange={(value) => {handleChange(value, user._id)}}
+                                onChange={(value) => {
+                                  handleChange(value, user._id);
+                                }}
                                 dropdownStyle={{ minWidth: "80px" }}
                                 width={100}
                               >

@@ -18,14 +18,11 @@ const AuthUser = () => {
 
     const authCheck = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_API}/api/v1/auth/userauth`,
-          {
-            headers: {
-              Authorization: auth?.token,
-            },
-          }
-        );
+        const res = await axios.get(`/api/v1/auth/userauth`, {
+          headers: {
+            Authorization: auth?.token,
+          },
+        });
         // console.log("Request has been made to the user-auth route", res.data);
 
         // console.log(res.data);

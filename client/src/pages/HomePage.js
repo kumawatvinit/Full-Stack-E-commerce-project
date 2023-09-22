@@ -45,7 +45,7 @@ const HomePage = () => {
     try {
       setLoading(true);
       const { data } = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/category-with-product-count`
+        `/api/v1/product/category-with-product-count`
       );
 
       setLoading(false);
@@ -73,7 +73,7 @@ const HomePage = () => {
     try {
       setLoading(true);
       const { data } = await customAxios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/products/${page}`
+        `/api/v1/product/products/${page}`
       );
       setLoading(false);
 
@@ -100,9 +100,7 @@ const HomePage = () => {
   const getTotalProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/total-products`
-      );
+      const { data } = await axios.get(`/api/v1/product/total-products`);
       setLoading(false);
 
       setTotal(data?.total);
@@ -132,13 +130,10 @@ const HomePage = () => {
   // filter products
   const filterProduct = async () => {
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/product/product-filter`,
-        {
-          checked,
-          radio,
-        }
-      );
+      const { data } = await axios.post(`/api/v1/product/product-filter`, {
+        checked,
+        radio,
+      });
 
       if (data.success) {
         setProducts(data?.products);
@@ -244,7 +239,7 @@ const HomePage = () => {
                   cover={
                     <img
                       alt="example"
-                      src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+                      src={`/api/v1/product/product-photo/${product._id}`}
                       style={{
                         height: 280,
                         width: 300,
