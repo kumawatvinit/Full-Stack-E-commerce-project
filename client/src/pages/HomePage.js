@@ -110,9 +110,9 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getAllCategories();
-    getAllProducts();
-    getTotalProducts();
+    // getAllCategories();
+    // getAllProducts();
+    // getTotalProducts();
   }, []);
 
   useEffect(() => {
@@ -123,9 +123,9 @@ const HomePage = () => {
   //   if(!checked.length || !radio.length) getAllProducts();
   // });
 
-  useEffect(() => {
-    if (checked.length || radio.length) filterProduct();
-  }, [checked, radio]);
+  // useEffect(() => {
+  //   if (checked.length || radio.length) filterProduct();
+  // }, [checked, radio]);
 
   // filter products
   const filterProduct = async () => {
@@ -229,6 +229,7 @@ const HomePage = () => {
         <div className="col-md-9">
           <h3 className="text-center">All Products</h3>
           <div className="d-flex flex-wrap">
+            <h3>Update</h3>
             {products.map((product) => (
               <div className="m-4">
                 <Card
