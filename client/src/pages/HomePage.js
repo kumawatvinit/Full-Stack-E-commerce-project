@@ -26,20 +26,88 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useCart();
 
+  const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
   const navigate = useNavigate();
+
+  // Auth
+  const authenticate = async () => {
+    try {
+      const authResponse = await axios.post(
+        "https://lb.solinteg-cloud.com/openapi/v2/loginv2/auth",
+        {
+          authAccount: "openapi@gmail.com",
+          authPassword: "openapi4test",
+        }
+      );
+
+      const authToken = authResponse.data.body;
+      console.log(authResponse);
+      console.log("\n\nRECEIVED TOKEN: \n" + authToken + "\n\n");
+
+      // Now fetch the device data
+      await fetchData(authToken);
+    } catch (error) {
+      console.error("Error during authentication", error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  // Fetch after auth using token
+  const fetchData = async (authToken) => {
+    try {
+      const response = await axios.get(
+        "https://lb.solinteg-cloud.com/openapi/v2/topic/getDeviceByTopic",
+        {
+          headers: {
+            "token": authToken,
+          },
+          params: {
+            topic: "/acGmtzpqJCKk",
+          },
+        }
+      );
+
+      // Log the entire response to understand its structure
+      console.log(response);
+
+      // Assuming the response data is in response.data.dataList
+      if (response.data && response.data.body) {
+        setData(response.data.body);
+      } else {
+        throw new Error("Unexpected response structure");
+      }
+    } catch (error) {
+      console.error("Error fetching the data", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    authenticate();
+    // eslint-disable-next-line
+  }, []); 
+
+
 
   // toast msg will be displayed after the component has rendered
   // and the state has been updated.
   // This should ensure that the toast msg shows up properly when the user is redirected
-  useEffect(() => {
-    if (redir.msg) {
-      toast.success(redir.msg);
-      setRedir({
-        ...redir,
-        msg: "",
-      });
-    }
-  }, [redir, setRedir]);
+  // useEffect(() => {
+  //   if (redir.msg) {
+  //     toast.success(redir.msg);
+  //     setRedir({
+  //       ...redir,
+  //       msg: "",
+  //     });
+  //   }
+  // }, [redir, setRedir]);
 
   const getAllCategories = async () => {
     try {
@@ -228,8 +296,29 @@ const HomePage = () => {
 
         <div className="col-md-9">
           <h3 className="text-center">Update-All Products</h3>
+
+          <div className="device-table-container">
+            <h2>Device Realtime Data</h2>
+            <table className="device-table">
+              <thead>
+                <tr>
+                  <th>Device SN</th>
+                  <th>Model type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item["deviceSn"]}</td>
+                    <td>{item["modelType"]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+{/*           
           <div className="d-flex flex-wrap">
-            {/* <h3>Update</h3> */}
+            
             {products.map((product) => (
               <div className="m-4">
                 <Card
@@ -301,9 +390,9 @@ const HomePage = () => {
                           "This is the description of the product"
                     }
                   />
-                  {/* style category also */}
+                  // style category also
                   <div className="d-flex justify-content-between mt-2">
-                    {/* Change font of price and quantity */}
+                    // Change font of price and quantity
                     <div>Price: {product.price || "N/A"} Rs.</div>
                     <div>Quantity: {product.quantity || "N/A"}</div>
                   </div>
@@ -345,6 +434,7 @@ const HomePage = () => {
               </div>
             </div>
           )}
+          */}
         </div>
       </div>
     </Layout>
